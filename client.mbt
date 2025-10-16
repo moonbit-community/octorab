@@ -17,14 +17,19 @@ pub let github_upload_url : String = "https://uploads.github.com"
 pub enum Auth {
   /// No authentication
   None
-  /// Personal Access Token authentication
-  PersonalToken(String)
   /// Basic authentication with username and password
-  Basic(String, String) // username, password
-  /// OAuth token authentication
-  OAuth(String)
+  Basic(username~ : String, password~ : String) // username, password
   /// GitHub App authentication
   App(AppAuth)
+  /// Authentication via a Github App repo-specific installation
+  Installation(app~ : AppAuth, installation~ : UInt64, token~ : CachedToken)
+  /// Access token based authentication.
+  AccessToken(secret~ : String)
+} derive(Show, Eq)
+
+struct CachedToken {
+  secret : String
+  expiration : Int
 } derive(Show, Eq)
 
 ///|
@@ -52,7 +57,7 @@ pub struct Headers {
   /// Content type header
   content_type : String?
   /// Authorization header
-  mut authorization : String?
+  authorization : String?
   /// Accept header for API version
   accept : String?
   /// User agent header
@@ -104,17 +109,6 @@ pub fn ClientConfig::default() -> ClientConfig {
 }
 
 ///|
-/// HTTP response representation
-pub struct Response[T] {
-  /// Response status code
-  status : Int
-  /// Response headers
-  headers : Map[String, String]
-  /// Response body
-  body : T
-} derive(Show, Eq)
-
-///|
 /// Error types for GitHub API operations
 pub enum GitHubError {
   /// HTTP request error
@@ -163,11 +157,7 @@ pub fn Octorab::with_auth(self : Octorab, auth : Auth) -> Octorab {
   { ..self, config: { ..self.config, auth, } }
 }
 
-///|
-/// Set personal access token authentication
-pub fn Octorab::with_token(self : Octorab, token : String) -> Octorab {
-  self.with_auth(Auth::PersonalToken(token))
-}
+
 
 ///|
 /// Set basic authentication
@@ -176,14 +166,10 @@ pub fn Octorab::with_basic_auth(
   username : String,
   password : String,
 ) -> Octorab {
-  self.with_auth(Auth::Basic(username, password))
+  self.with_auth(Auth::Basic(username~, password~))
 }
 
-///|
-/// Set OAuth token authentication
-pub fn Octorab::with_oauth(self : Octorab, token : String) -> Octorab {
-  self.with_auth(Auth::OAuth(token))
-}
+
 
 ///|
 /// Set GitHub App authentication
@@ -195,32 +181,7 @@ pub fn Octorab::with_app_auth(
   self.with_auth(Auth::App({ app_id, private_key }))
 }
 
-///|
-/// Generate authorization header value from auth configuration
-fn Octorab::auth_header(self : Octorab) -> String? {
-  match self.config.auth {
-    Auth::None => None
-    Auth::PersonalToken(token) => Some("Bearer \{token}")
-    Auth::Basic(username, password) =>
-      // In a real implementation, this would use proper base64 encoding
-      Some("Basic \{username}:\{password}")
-    Auth::OAuth(token) => Some("Bearer \{token}")
-    Auth::App(_app_auth) =>
-      // In a real implementation, this would generate a JWT token
-      Some("Bearer <generated_jwt_token>")
-  }
-}
 
-///|
-/// Build headers for API requests
-fn Octorab::build_headers(self : Octorab) -> Headers {
-  let headers = Headers::new()
-  match self.auth_header() {
-    Some(auth) => headers.authorization = Some(auth)
-    None => ()
-  }
-  headers
-}
 
 ///|
 /// Generic HTTP request method (placeholder implementation)
@@ -238,8 +199,7 @@ pub fn[T] Octorab::request(
   // 4. Parse the response
   // 5. Handle errors appropriately
 
-  let _url = "\{self.config.base_url}\{path}"
-  let _headers = self.build_headers()
+  ...
 
   // Placeholder error for demonstration
   Err(GitHubError::Other("HTTP request not implemented"))
