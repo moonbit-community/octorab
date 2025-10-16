@@ -318,7 +318,9 @@ pub fn RepositoryHandler::create_release(
 /// let client = Octorab::new().with_token("your_token")
 /// let fork = client.repositories("octocat", "Hello-World").fork().await?
 /// ```
-pub fn RepositoryHandler::fork(self : RepositoryHandler) -> GhResult[Repository] {
+pub fn RepositoryHandler::fork(
+  self : RepositoryHandler,
+) -> GhResult[Repository] {
   let path = "/\{self.repo.to_path()}/forks"
   self.client.post(path, None)
 }
@@ -359,7 +361,9 @@ pub fn RepositoryHandler::unstar(self : RepositoryHandler) -> GhResult[Unit] {
 /// let client = Octorab::new().with_token("your_token")
 /// let is_starred = client.repositories("octocat", "Hello-World").is_starred().await?
 /// ```
-pub fn RepositoryHandler::is_starred(self : RepositoryHandler) -> GhResult[Bool] {
+pub fn RepositoryHandler::is_starred(
+  self : RepositoryHandler,
+) -> GhResult[Bool] {
   let path = "/user/starred/\{self.repo.to_path()}"
   // In a real implementation, this would check the HTTP status code
   match self.client.get(path) {

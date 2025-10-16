@@ -133,6 +133,7 @@ pub enum GitHubError {
   Other(String)
 } derive(Show, Eq)
 
+///|
 pub typealias Result[T, GitHubError] as GhResult[T]
 
 ///|
@@ -158,19 +159,13 @@ pub fn Octorab::with_config(config : ClientConfig) -> Octorab {
 
 ///|
 /// Set authentication for the client
-pub fn Octorab::with_auth(
-  self : Octorab,
-  auth : Auth,
-) -> Octorab {
+pub fn Octorab::with_auth(self : Octorab, auth : Auth) -> Octorab {
   { ..self, config: { ..self.config, auth, } }
 }
 
 ///|
 /// Set personal access token authentication
-pub fn Octorab::with_token(
-  self : Octorab,
-  token : String,
-) -> Octorab {
+pub fn Octorab::with_token(self : Octorab, token : String) -> Octorab {
   self.with_auth(Auth::PersonalToken(token))
 }
 
@@ -186,10 +181,7 @@ pub fn Octorab::with_basic_auth(
 
 ///|
 /// Set OAuth token authentication
-pub fn Octorab::with_oauth(
-  self : Octorab,
-  token : String,
-) -> Octorab {
+pub fn Octorab::with_oauth(self : Octorab, token : String) -> Octorab {
   self.with_auth(Auth::OAuth(token))
 }
 

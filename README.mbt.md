@@ -27,14 +27,15 @@ Add this to your `moon.mod.json`:
 Here's a simple example to get you started:
 
 ```moonbit
+///|
 test "basic usage" {
   // Create a client with authentication
   let client = Octorab::new().with_token("your_personal_access_token")
-  
+
   // Get repository information
   let repo_result = client.repositories("octocat", "Hello-World").get()
   // In a real implementation, this would return actual data
-  
+
   // Create an issue
   let issue_params = CreateIssueParams::{
     title: "Found a bug",
@@ -42,11 +43,13 @@ test "basic usage" {
     assignee: None,
     milestone: None,
     labels: Some(["bug", "high-priority"]),
-    assignees: None
+    assignees: None,
   }
-  let issue_result = client.repositories("octocat", "Hello-World")
+  let issue_result = client
+    .repositories("octocat", "Hello-World")
     .issues()
     .create(issue_params)
+
 }
 ```
 
@@ -55,6 +58,7 @@ test "basic usage" {
 ### Personal Access Token
 
 ```moonbit
+///|
 test "personal access token auth" {
   let client = Octorab::new().with_token("ghp_xxxxxxxxxxxxxxxxxxxx")
   // Use the client...
@@ -64,6 +68,7 @@ test "personal access token auth" {
 ### Basic Authentication
 
 ```moonbit
+///|
 test "basic auth" {
   let client = Octorab::new().with_basic_auth("username", "password")
   // Note: Basic auth with password is deprecated by GitHub
@@ -73,6 +78,7 @@ test "basic auth" {
 ### OAuth Token
 
 ```moonbit
+///|
 test "oauth auth" {
   let client = Octorab::new().with_oauth("oauth_token")
   // Use the client...
@@ -82,8 +88,11 @@ test "oauth auth" {
 ### GitHub App Authentication
 
 ```moonbit
+///|
 test "github app auth" {
-  let client = Octorab::new().with_app_auth(12345, "-----BEGIN RSA PRIVATE KEY-----\n...")
+  let client = Octorab::new().with_app_auth(
+    12345, "-----BEGIN RSA PRIVATE KEY-----\n...",
+  )
   // Use the client...
 }
 ```
@@ -93,64 +102,68 @@ test "github app auth" {
 ### Getting Repository Information
 
 ```moonbit
+///|
 test "get repository" {
   let client = Octorab::new().with_token("your_token")
-  
+
   // Get repository details
   let repo_result = client.repositories("microsoft", "vscode").get()
-  
+
   // Get repository README
   let readme_result = client.repositories("microsoft", "vscode").get_readme()
-  
+
   // List repository languages
-  let languages_result = client.repositories("microsoft", "vscode").list_languages()
+  let languages_result = client
+    .repositories("microsoft", "vscode")
+    .list_languages()
+
 }
 ```
 
 ### Repository Content Operations
 
 ```moonbit
+///|
 test "repository content" {
   let client = Octorab::new().with_token("your_token")
   let repo = client.repositories("octocat", "Hello-World")
-  
+
   // Get file contents
   let content_result = repo.get_contents("README.md")
-  
+
   // Create a new file
   let create_result = repo.create_or_update_file(
-    "docs/new-doc.md",
-    "Add new documentation",
-    "# New Documentation\n\nThis is a new file."
+    "docs/new-doc.md", "Add new documentation", "# New Documentation\n\nThis is a new file.",
   )
-  
+
   // Delete a file
   let delete_result = repo.delete_file(
-    "old-file.txt",
-    "Remove old file",
-    "file_sha_here"
+    "old-file.txt", "Remove old file", "file_sha_here",
   )
+
 }
 ```
 
 ### Repository Collaboration
 
 ```moonbit
+///|
 test "repository collaboration" {
   let client = Octorab::new().with_token("your_token")
   let repo = client.repositories("octocat", "Hello-World")
-  
+
   // Fork the repository
   let fork_result = repo.fork()
-  
+
   // Star the repository
   let star_result = repo.star()
-  
+
   // Check if starred
   let is_starred_result = repo.is_starred()
-  
+
   // Unstar the repository
   let unstar_result = repo.unstar()
+
 }
 ```
 
@@ -159,26 +172,29 @@ test "repository collaboration" {
 ### Listing and Getting Issues
 
 ```moonbit
+///|
 test "issue operations" {
   let client = Octorab::new().with_token("your_token")
   let issues = client.repositories("octocat", "Hello-World").issues()
-  
+
   // List all open issues
   let list_params = ListIssuesParams::default()
   let issues_result = issues.list(list_params)
-  
+
   // Get a specific issue
   let issue_result = issues.get(42)
+
 }
 ```
 
 ### Creating and Updating Issues
 
 ```moonbit
+///|
 test "create and update issues" {
   let client = Octorab::new().with_token("your_token")
   let issues = client.repositories("octocat", "Hello-World").issues()
-  
+
   // Create a new issue
   let create_params = {
     title: "New feature request",
@@ -186,10 +202,10 @@ test "create and update issues" {
     assignee: Some("octocat"),
     milestone: None,
     labels: Some(["enhancement", "help wanted"]),
-    assignees: Some(["octocat", "defunkt"])
+    assignees: Some(["octocat", "defunkt"]),
   }
   let created_issue = issues.create(create_params)
-  
+
   // Update an existing issue
   let update_params = {
     title: Some("Updated feature request"),
@@ -198,30 +214,33 @@ test "create and update issues" {
     state: Some(IssueState::Closed),
     milestone: None,
     labels: Some(["enhancement"]),
-    assignees: None
+    assignees: None,
   }
   let updated_issue = issues.update(42, update_params)
+
 }
 ```
 
 ### Issue Comments
 
 ```moonbit
+///|
 test "issue comments" {
   let client = Octorab::new().with_token("your_token")
   let issues = client.repositories("octocat", "Hello-World").issues()
-  
+
   // List comments on an issue
   let comments_result = issues.list_comments(42)
-  
+
   // Create a comment
   let comment_result = issues.create_comment(42, "Thanks for reporting this!")
-  
+
   // Update a comment
   let updated_comment = issues.update_comment(123456, "Updated comment content")
-  
+
   // Delete a comment
   let delete_result = issues.delete_comment(123456)
+
 }
 ```
 
@@ -230,29 +249,32 @@ test "issue comments" {
 ### Listing and Getting Pull Requests
 
 ```moonbit
+///|
 test "pull request operations" {
   let client = Octorab::new().with_token("your_token")
   let pulls = client.repositories("octocat", "Hello-World").pulls()
-  
+
   // List all open pull requests
   let list_params = ListPullRequestsParams::default()
   let pulls_result = pulls.list(list_params)
-  
+
   // Get a specific pull request
   let pr_result = pulls.get(123)
-  
+
   // Check if a PR is merged
   let is_merged = pulls.is_merged(123)
+
 }
 ```
 
 ### Creating and Managing Pull Requests
 
 ```moonbit
+///|
 test "create and manage pull requests" {
   let client = Octorab::new().with_token("your_token")
   let pulls = client.repositories("octocat", "Hello-World").pulls()
-  
+
   // Create a new pull request
   let create_params = {
     title: "Add awesome new feature",
@@ -260,49 +282,56 @@ test "create and manage pull requests" {
     head: "feature-branch",
     base: "main",
     draft: Some(false),
-    maintainer_can_modify: Some(true)
+    maintainer_can_modify: Some(true),
   }
   let created_pr = pulls.create(create_params)
-  
+
   // Update a pull request
   let update_params = {
     title: Some("Updated: Add awesome new feature"),
     body: Some("Updated description with more details"),
     state: None,
     base: None,
-    maintainer_can_modify: None
+    maintainer_can_modify: None,
   }
   let updated_pr = pulls.update(123, update_params)
-  
+
   // Merge a pull request
   let merge_params = {
     commit_title: Some("Merge pull request #123"),
     commit_message: Some("Adds awesome new feature"),
     sha: Some("commit_sha_here"),
-    merge_method: Some("merge")
+    merge_method: Some("merge"),
   }
   let merge_result = pulls.merge(123, merge_params)
+
 }
 ```
 
 ### Pull Request Reviews
 
 ```moonbit
+///|
 test "pull request reviews" {
   let client = Octorab::new().with_token("your_token")
   let pulls = client.repositories("octocat", "Hello-World").pulls()
-  
+
   // List reviews for a pull request
   let reviews_result = pulls.list_reviews(123)
-  
+
   // Create a review
-  let review_result = pulls.create_review(123, "APPROVE", Some("Looks good to me!"))
-  
+  let review_result = pulls.create_review(
+    123,
+    "APPROVE",
+    Some("Looks good to me!"),
+  )
+
   // Submit a pending review
   let submit_result = pulls.submit_review(123, 456, "APPROVE", Some("LGTM!"))
-  
+
   // Dismiss a review
   let dismiss_result = pulls.dismiss_review(123, 456, "No longer relevant")
+
 }
 ```
 
@@ -311,98 +340,109 @@ test "pull request reviews" {
 ### Getting User Information
 
 ```moonbit
+///|
 test "user information" {
   let client = Octorab::new().with_token("your_token")
-  
+
   // Get a specific user
   let user_result = client.users("octocat").get()
-  
+
   // Get the authenticated user
   let current_user_result = client.current_user().get()
-  
+
   // Update the authenticated user
-  let updated_user = client.current_user().update(
-    Some("John Doe"),
-    Some("john@example.com"),
-    Some("Software developer passionate about open source")
-  )
+  let updated_user = client
+    .current_user()
+    .update(
+      Some("John Doe"),
+      Some("john@example.com"),
+      Some("Software developer passionate about open source"),
+    )
+
 }
 ```
 
 ### User Repositories and Activity
 
 ```moonbit
+///|
 test "user repositories and activity" {
   let client = Octorab::new().with_token("your_token")
   let user = client.users("octocat")
-  
+
   // List user's repositories
   let repos_result = user.list_repos()
-  
+
   // List user's organizations
   let orgs_result = user.list_orgs()
-  
+
   // List starred repositories
   let starred_result = user.list_starred()
-  
+
   // List user's gists
   let gists_result = user.list_gists()
-  
+
   // List user events
   let events_result = user.list_events()
+
 }
 ```
 
 ### Following Users
 
 ```moonbit
+///|
 test "following users" {
   let client = Octorab::new().with_token("your_token")
-  
+
   // List followers
   let followers_result = client.users("octocat").list_followers()
-  
+
   // List following
   let following_result = client.users("octocat").list_following()
-  
+
   // Check if following a user
   let is_following = client.users("octocat").is_following("defunkt")
-  
+
   // Follow a user (as authenticated user)
   let follow_result = client.current_user().follow("octocat")
-  
+
   // Unfollow a user
   let unfollow_result = client.current_user().unfollow("octocat")
+
 }
 ```
 
 ### SSH Keys and Emails
 
 ```moonbit
+///|
 test "ssh keys and emails" {
   let client = Octorab::new().with_token("your_token")
   let current_user = client.current_user()
-  
+
   // List SSH keys
   let keys_result = current_user.list_ssh_keys()
-  
+
   // Add an SSH key
   let add_key_result = current_user.add_ssh_key(
-    "My Development Key",
-    "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQ..."
+    "My Development Key", "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQ...",
   )
-  
+
   // Delete an SSH key
   let delete_key_result = current_user.delete_ssh_key(123456)
-  
+
   // List email addresses
   let emails_result = current_user.list_emails()
-  
+
   // Add email addresses
-  let add_emails_result = current_user.add_emails(["john@example.com", "john.doe@example.org"])
-  
+  let add_emails_result = current_user.add_emails([
+    "john@example.com", "john.doe@example.org",
+  ])
+
   // Delete email addresses
   let delete_emails_result = current_user.delete_emails(["old@example.com"])
+
 }
 ```
 
@@ -411,29 +451,19 @@ test "ssh keys and emails" {
 The library uses a `Result` type for error handling. All API calls return `Result[T, GitHubError]`:
 
 ```moonbit
+///|
 test "error handling" {
   let client = Octorab::new().with_token("invalid_token")
-  
   match client.repositories("octocat", "Hello-World").get() {
-    Ok(repo) => {
+    Ok(repo) =>
       // Handle successful response
       println("Repository: \{repo.name}")
-    }
-    Err(GitHubError::AuthError(msg)) => {
-      println("Authentication error: \{msg}")
-    }
-    Err(GitHubError::NotFound(msg)) => {
-      println("Resource not found: \{msg}")
-    }
-    Err(GitHubError::RateLimit(msg)) => {
-      println("Rate limit exceeded: \{msg}")
-    }
-    Err(GitHubError::HttpError(status, msg)) => {
+    Err(GitHubError::AuthError(msg)) => println("Authentication error: \{msg}")
+    Err(GitHubError::NotFound(msg)) => println("Resource not found: \{msg}")
+    Err(GitHubError::RateLimit(msg)) => println("Rate limit exceeded: \{msg}")
+    Err(GitHubError::HttpError(status, msg)) =>
       println("HTTP error \{status}: \{msg}")
-    }
-    Err(error) => {
-      println("Other error: \{error}")
-    }
+    Err(error) => println("Other error: \{error}")
   }
 }
 ```
@@ -443,6 +473,7 @@ test "error handling" {
 You can customize the client configuration:
 
 ```moonbit
+///|
 test "custom configuration" {
   let config = {
     base_url: "https://api.github.com",
@@ -450,9 +481,8 @@ test "custom configuration" {
     auth: Auth::PersonalToken("your_token"),
     timeout: 60000, // 60 seconds
     follow_redirects: true,
-    max_redirects: 5
+    max_redirects: 5,
   }
-  
   let client = Octorab::with_config(config)
   // Use the configured client...
 }

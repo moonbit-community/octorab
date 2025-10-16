@@ -32,19 +32,13 @@ pub struct UsersHandler {
 
 ///|
 /// Create a new users handler for a specific user
-pub fn Octorab::users(
-  self : Octorab,
-  username : String,
-) -> UsersHandler {
+pub fn Octorab::users(self : Octorab, username : String) -> UsersHandler {
   { client: self, user_ref: Some(UserRef::ByUsername(username)) }
 }
 
 ///|
 /// Create a new users handler for a specific user by ID
-pub fn Octorab::users_by_id(
-  self : Octorab,
-  user_id : Int,
-) -> UsersHandler {
+pub fn Octorab::users_by_id(self : Octorab, user_id : Int) -> UsersHandler {
   { client: self, user_ref: Some(UserRef::ById(user_id)) }
 }
 
