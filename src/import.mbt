@@ -1,1 +1,0 @@
-using @http { type Client, get as http_get }
