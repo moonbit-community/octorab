@@ -1,0 +1,507 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "myfreess/octorab"
+
+import {
+  "moonbitlang/async/http",
+  "moonbitlang/async/io",
+  "moonbitlang/core/json",
+}
+
+// Values
+pub fn initialise(Octorab) -> Unit
+
+pub fn instance() -> Octorab
+
+pub fn is_success_status(Int) -> Bool
+
+pub fn parse_github_error(Int, &@io.Data) -> GitHubError
+
+// Errors
+pub suberror OctorabError {
+  InvalidUrl(String)
+  HttpError(GitHubError)
+}
+pub impl Show for OctorabError
+pub impl ToJson for OctorabError
+
+// Types and methods
+pub struct ActionsHandler {
+  crab : Octorab
+  owner : String
+  repo : String
+}
+pub async fn ActionsHandler::cancel_run(Self, Int) -> Unit
+pub async fn ActionsHandler::create_jit_runner_config(Self, String, Int, Array[String], work_folder? : String) -> Json
+pub async fn ActionsHandler::delete_artifact(Self, Int) -> Unit
+pub async fn ActionsHandler::dispatch_workflow(Self, String, String, inputs? : Json) -> Unit
+pub async fn ActionsHandler::download_artifact(Self, Int, archive_format? : String) -> &@io.Data
+pub async fn ActionsHandler::get_artifact(Self, Int) -> Json
+pub async fn ActionsHandler::get_workflow(Self, Int) -> Json
+pub async fn ActionsHandler::list_jobs(Self, Int, per_page? : Int, page? : Int) -> Json
+pub async fn ActionsHandler::list_run_artifacts(Self, Int, per_page? : Int, page? : Int) -> Page[Json]
+pub async fn ActionsHandler::list_runs(Self, actor? : String, branch? : String, event? : String, status? : String, per_page? : Int, page? : Int) -> Json
+pub async fn ActionsHandler::list_self_hosted_runners(Self, name? : String, per_page? : Int, page? : Int) -> Json
+pub async fn ActionsHandler::list_workflow_runs(Self, Int, actor? : String, branch? : String, event? : String, status? : String, per_page? : Int, page? : Int) -> Json
+pub async fn ActionsHandler::list_workflows(Self, per_page? : Int, page? : Int) -> Json
+pub async fn ActionsHandler::rerun(Self, Int) -> Unit
+pub async fn ActionsHandler::rerun_failed_jobs(Self, Int) -> Unit
+
+pub struct AppsHandler {
+  crab : Octorab
+}
+pub async fn AppsHandler::get_org_installation(Self, String) -> Json
+pub async fn AppsHandler::get_repository_installation(Self, String, String) -> Json
+pub async fn AppsHandler::installation(Self, Int) -> Json
+pub async fn AppsHandler::list_installations(Self, since? : String, per_page? : Int, page? : Int) -> Page[Json]
+
+pub enum Auth {
+  Token(String)
+  Bearer(String)
+}
+pub fn Auth::bearer(String) -> Self
+pub fn Auth::header(Self) -> (String, String)
+pub fn Auth::token(String) -> Self
+pub impl Eq for Auth
+pub impl Show for Auth
+pub impl ToJson for Auth
+
+pub struct ChecksHandler {
+  crab : Octorab
+  owner : String
+  repo : String
+}
+pub async fn ChecksHandler::get(Self, Int) -> Json
+pub async fn ChecksHandler::list_for_ref(Self, String, check_name? : String, status? : String, filter? : String, per_page? : Int, page? : Int) -> Json
+
+pub struct CodeScanningsHandler {
+  crab : Octorab
+  owner : String
+  repo : String
+}
+pub async fn CodeScanningsHandler::get(Self, Int) -> Json
+pub async fn CodeScanningsHandler::list(Self, state? : String, severity? : String, tool_name? : String, tool_guid? : String, reference? : String, sort? : String, direction? : String, per_page? : Int, page? : Int) -> Page[Json]
+pub async fn CodeScanningsHandler::update(Self, Int, state? : String, dismissed_reason? : String, dismissed_comment? : String) -> Json
+
+pub struct CommitsHandler {
+  crab : Octorab
+  owner : String
+  repo : String
+}
+pub async fn CommitsHandler::get(Self, String) -> Json
+pub async fn CommitsHandler::list(Self, sha? : String, path? : String, author? : String, since? : String, until? : String, per_page? : Int, page? : Int) -> Page[Json]
+
+pub struct CurrentHandler {
+  crab : Octorab
+}
+pub async fn CurrentHandler::app(Self) -> Json
+pub async fn CurrentHandler::list_app_installations(Self, per_page? : Int, page? : Int) -> Json
+pub async fn CurrentHandler::list_gists(Self, since? : String, per_page? : Int, page? : Int) -> Page[Json]
+pub async fn CurrentHandler::list_org_memberships(Self, per_page? : Int, page? : Int) -> Page[Json]
+pub async fn CurrentHandler::list_repos(Self, visibility? : String, affiliation? : String, type_? : String, sort? : String, direction? : SortDirection, per_page? : Int, page? : Int) -> Page[Repository]
+pub async fn CurrentHandler::list_repos_starred(Self, sort? : String, direction? : SortDirection, per_page? : Int, page? : Int) -> Page[Repository]
+pub async fn CurrentHandler::list_starred_gists(Self, since? : String, per_page? : Int, page? : Int) -> Page[Json]
+pub async fn CurrentHandler::update_user(Self, Json) -> User
+pub async fn CurrentHandler::user(Self) -> User
+
+pub struct GistsHandler {
+  crab : Octorab
+}
+pub async fn GistsHandler::create(Self, Json) -> Json
+pub async fn GistsHandler::delete(Self, String) -> Unit
+pub async fn GistsHandler::get(Self, String) -> Json
+pub async fn GistsHandler::list(Self, per_page? : Int, page? : Int) -> Page[Json]
+pub async fn GistsHandler::list_for_user(Self, String, per_page? : Int, page? : Int) -> Page[Json]
+pub async fn GistsHandler::list_public(Self, per_page? : Int, page? : Int) -> Page[Json]
+pub async fn GistsHandler::list_starred(Self, per_page? : Int, page? : Int) -> Page[Json]
+
+pub struct GitHubError {
+  status : Int
+  message : String
+  documentation_url : String?
+  errors : Array[Json]?
+}
+pub impl Eq for GitHubError
+pub impl Show for GitHubError
+pub impl ToJson for GitHubError
+
+pub struct GitignoreHandler {
+  crab : Octorab
+}
+pub async fn GitignoreHandler::get_template(Self, String) -> Json
+pub async fn GitignoreHandler::list_templates(Self) -> Array[String]
+
+pub struct HooksHandler {
+  crab : Octorab
+  owner : String
+  repo : String?
+}
+pub async fn HooksHandler::list_deliveries(Self, Int, per_page? : Int, page? : Int) -> Page[Json]
+pub fn HooksHandler::repo(Self, String) -> Self
+pub async fn HooksHandler::retry_delivery(Self, Int, Int) -> Unit
+
+pub struct Issue {
+  id : Int
+  number : Int
+  title : String
+  state : String?
+  user : User?
+  body : String?
+  comments : Int?
+  html_url : String?
+  pull_request : PullRequestLinks?
+}
+pub impl Eq for Issue
+pub impl Show for Issue
+pub impl ToJson for Issue
+pub impl @json.FromJson for Issue
+
+pub(all) enum IssueState {
+  Open
+  Closed
+  All
+}
+pub fn IssueState::as_query(Self) -> String
+pub impl Eq for IssueState
+pub impl Show for IssueState
+pub impl ToJson for IssueState
+
+pub struct IssuesHandler {
+  crab : Octorab
+  owner : String
+  repo : String
+}
+pub async fn IssuesHandler::create(Self, String, body? : String, assignee? : String, labels? : Array[String]) -> Issue
+pub async fn IssuesHandler::get(Self, Int) -> Issue
+pub async fn IssuesHandler::list(Self, state? : IssueState, labels? : Array[String], per_page? : Int, page? : Int, creator? : String, assignee? : String, since? : String) -> Page[Issue]
+
+pub struct LicensesHandler {
+  crab : Octorab
+}
+pub async fn LicensesHandler::get(Self, String) -> Json
+pub async fn LicensesHandler::list(Self) -> Array[Json]
+
+pub struct Octorab {
+  base_uri : String
+  base_path : String
+  user_agent : String
+  auth : Auth?
+  api_version : String
+  extra_headers : Map[String, String]
+}
+pub fn Octorab::actions(Self, String, String) -> ActionsHandler
+pub async fn[T : @json.FromJson] Octorab::all_pages(Self, Page[T]) -> Array[T]
+pub fn Octorab::apps(Self) -> AppsHandler
+pub fn Octorab::checks(Self, String, String) -> ChecksHandler
+pub fn Octorab::code_scannings(Self, String, String) -> CodeScanningsHandler
+pub fn Octorab::commits(Self, String, String) -> CommitsHandler
+pub fn Octorab::current(Self) -> CurrentHandler
+pub async fn Octorab::current_user(Self) -> User
+pub async fn Octorab::current_user_orgs(Self, per_page? : Int, page? : Int) -> Page[Organization]
+pub fn Octorab::default() -> Self
+pub async fn Octorab::delete(Self, String, query? : Map[String, String], headers? : Map[String, String]) -> Unit
+pub async fn Octorab::events(Self, per_page? : Int, page? : Int) -> Page[Json]
+pub async fn[T : @json.FromJson] Octorab::get(Self, String, query? : Map[String, String], headers? : Map[String, String]) -> T
+pub async fn[T : @json.FromJson] Octorab::get_page(Self, String, query? : Map[String, String], headers? : Map[String, String]) -> Page[T]
+pub async fn[T : @json.FromJson] Octorab::get_page_opt(Self, String?) -> Page[T]?
+pub async fn Octorab::get_project(Self, Int) -> Json
+pub async fn Octorab::get_raw(Self, String, query? : Map[String, String], headers? : Map[String, String]) -> (@http.Response, &@io.Data)
+pub fn Octorab::gists(Self) -> GistsHandler
+pub fn Octorab::gitignore(Self) -> GitignoreHandler
+pub async fn Octorab::graphql(Self, String, variables? : Json, operation_name? : String) -> Json
+pub fn Octorab::hooks(Self, String) -> HooksHandler
+pub fn Octorab::issues(Self, String, String) -> IssuesHandler
+pub fn Octorab::licenses(Self) -> LicensesHandler
+pub async fn Octorab::list_org_projects(Self, String, state? : String, per_page? : Int, page? : Int) -> Page[Json]
+pub async fn Octorab::list_org_repos(Self, String, per_page? : Int, page? : Int, sort? : String, direction? : SortDirection) -> Page[Repository]
+pub async fn Octorab::list_project_cards(Self, Int, per_page? : Int, page? : Int) -> Page[Json]
+pub async fn Octorab::list_project_columns(Self, Int, per_page? : Int, page? : Int) -> Page[Json]
+pub async fn Octorab::list_repo_projects(Self, String, String, state? : String, per_page? : Int, page? : Int) -> Page[Json]
+pub async fn Octorab::list_user_followers(Self, String, per_page? : Int, page? : Int) -> Page[User]
+pub async fn Octorab::list_user_following(Self, String, per_page? : Int, page? : Int) -> Page[User]
+pub async fn Octorab::list_user_orgs(Self, String, per_page? : Int, page? : Int) -> Page[Organization]
+pub async fn Octorab::list_user_repos(Self, String, per_page? : Int, page? : Int, sort? : String, direction? : SortDirection) -> Page[Repository]
+pub fn Octorab::new(base_url? : String, user_agent? : String, api_version? : String, auth? : Auth) -> Self raise OctorabError
+pub async fn Octorab::notifications(Self, all? : Bool, participating? : Bool, since? : String, before? : String, per_page? : Int, page? : Int) -> Page[Json]
+pub async fn Octorab::org_events(Self, String, per_page? : Int, page? : Int) -> Page[Json]
+pub fn Octorab::orgs(Self, String) -> OrgsHandler
+pub async fn[T : @json.FromJson] Octorab::patch(Self, String, Json, query? : Map[String, String], headers? : Map[String, String]) -> T
+pub async fn[T : @json.FromJson] Octorab::post(Self, String, Json, query? : Map[String, String], headers? : Map[String, String]) -> T
+pub async fn Octorab::post_raw(Self, String, &@io.Data, query? : Map[String, String], headers? : Map[String, String]) -> (@http.Response, &@io.Data)
+pub fn Octorab::pulls(Self, String, String) -> PullsHandler
+pub async fn[T : @json.FromJson] Octorab::put(Self, String, Json, query? : Map[String, String], headers? : Map[String, String]) -> T
+pub async fn Octorab::rate_limit(Self) -> Json
+pub async fn Octorab::render_markdown(Self, String, mode? : String, context? : String) -> String
+pub async fn Octorab::render_markdown_raw(Self, String) -> String
+pub async fn Octorab::repo_events(Self, String, String, per_page? : Int, page? : Int) -> Page[Json]
+pub async fn Octorab::repo_notifications(Self, String, String, all? : Bool, participating? : Bool, since? : String, before? : String, per_page? : Int, page? : Int) -> Page[Json]
+pub fn Octorab::repos(Self, String, String) -> ReposHandler
+pub async fn Octorab::request(Self, @http.RequestMethod, String, query? : Map[String, String], body? : &@io.Data, headers? : Map[String, String]) -> (@http.Response, &@io.Data)
+pub async fn[T : @json.FromJson] Octorab::request_json(Self, @http.RequestMethod, String, query? : Map[String, String], body? : Json, headers? : Map[String, String]) -> T
+pub async fn Octorab::request_raw(Self, @http.RequestMethod, String, query? : Map[String, String], body? : &@io.Data, headers? : Map[String, String]) -> (@http.Response, &@io.Data)
+pub async fn Octorab::search_code(Self, String, sort? : String, order? : SortDirection, per_page? : Int, page? : Int) -> Page[Json]
+pub async fn Octorab::search_issues(Self, String, sort? : PullSort, order? : SortDirection, per_page? : Int, page? : Int) -> Page[Json]
+pub async fn Octorab::search_repositories(Self, String, sort? : RepoSort, order? : SortDirection, per_page? : Int, page? : Int) -> Page[Repository]
+pub async fn Octorab::search_users(Self, String, sort? : String, order? : SortDirection, per_page? : Int, page? : Int) -> Page[User]
+pub fn Octorab::teams(Self, String) -> TeamsHandler
+pub async fn Octorab::user(Self, String) -> User
+pub async fn Octorab::user_events(Self, String, per_page? : Int, page? : Int) -> Page[Json]
+pub async fn Octorab::user_received_events(Self, String, per_page? : Int, page? : Int) -> Page[Json]
+pub fn Octorab::with_api_version(Self, String) -> Self
+pub fn Octorab::with_auth(Self, Auth) -> Self
+pub fn Octorab::with_base_url(Self, String) -> Self raise OctorabError
+pub fn Octorab::with_bearer(Self, String) -> Self
+pub fn Octorab::with_header(Self, String, String) -> Self
+pub fn Octorab::with_token(Self, String) -> Self
+pub fn Octorab::with_user_agent(Self, String) -> Self
+pub fn Octorab::workflows(Self, String, String) -> WorkflowsHandler
+
+pub(all) enum OrgMemberFilter {
+  All
+  TwoFactorDisabled
+}
+pub fn OrgMemberFilter::as_query(Self) -> String
+pub impl Eq for OrgMemberFilter
+pub impl Show for OrgMemberFilter
+pub impl ToJson for OrgMemberFilter
+
+pub(all) enum OrgMemberRole {
+  All
+  Admin
+  Member
+}
+pub fn OrgMemberRole::as_query(Self) -> String
+pub impl Eq for OrgMemberRole
+pub impl Show for OrgMemberRole
+pub impl ToJson for OrgMemberRole
+
+pub(all) enum OrgRepoSort {
+  Created
+  Updated
+  Pushed
+  FullName
+}
+pub fn OrgRepoSort::as_query(Self) -> String
+pub impl Eq for OrgRepoSort
+pub impl Show for OrgRepoSort
+pub impl ToJson for OrgRepoSort
+
+pub(all) enum OrgRepoType {
+  All
+  Public
+  Private
+  Forks
+  Sources
+  Member
+  Internal
+}
+pub fn OrgRepoType::as_query(Self) -> String
+pub impl Eq for OrgRepoType
+pub impl Show for OrgRepoType
+pub impl ToJson for OrgRepoType
+
+pub struct Organization {
+  login : String
+  id : Int
+  name : String?
+  description : String?
+  html_url : String?
+  repos_url : String?
+}
+pub impl Eq for Organization
+pub impl Show for Organization
+pub impl ToJson for Organization
+pub impl @json.FromJson for Organization
+
+pub struct OrgsHandler {
+  crab : Octorab
+  org : String
+}
+pub async fn OrgsHandler::get(Self) -> Organization
+pub async fn OrgsHandler::list_members(Self, filter? : OrgMemberFilter, role? : OrgMemberRole, per_page? : Int, page? : Int) -> Page[User]
+pub async fn OrgsHandler::list_repos(Self, repo_type? : OrgRepoType, sort? : OrgRepoSort, direction? : SortDirection, per_page? : Int, page? : Int) -> Page[Repository]
+
+pub struct Page[T] {
+  items : Array[T]
+  next : String?
+  prev : String?
+  first : String?
+  last : String?
+  total_count : Int?
+  incomplete_results : Bool?
+}
+pub fn[T] Page::empty() -> Self[T]
+pub fn[T] Page::take_items(Self[T]) -> Array[T]
+
+pub struct PageLinks {
+  mut next : String?
+  mut prev : String?
+  mut first : String?
+  mut last : String?
+}
+pub fn PageLinks::empty() -> Self
+pub impl Eq for PageLinks
+pub impl Show for PageLinks
+pub impl ToJson for PageLinks
+
+pub struct PullRequest {
+  id : Int
+  number : Int
+  title : String
+  state : String?
+  user : User?
+  body : String?
+  html_url : String?
+  diff_url : String?
+  patch_url : String?
+  merged_at : String?
+}
+pub impl Eq for PullRequest
+pub impl Show for PullRequest
+pub impl ToJson for PullRequest
+pub impl @json.FromJson for PullRequest
+
+pub struct PullRequestFile {
+  sha : String
+  filename : String
+  status : String?
+  additions : Int?
+  deletions : Int?
+  changes : Int?
+  patch : String?
+}
+pub impl Eq for PullRequestFile
+pub impl Show for PullRequestFile
+pub impl ToJson for PullRequestFile
+pub impl @json.FromJson for PullRequestFile
+
+pub struct PullRequestLinks {
+  url : String?
+  html_url : String?
+  diff_url : String?
+  patch_url : String?
+}
+pub impl Eq for PullRequestLinks
+pub impl Show for PullRequestLinks
+pub impl ToJson for PullRequestLinks
+pub impl @json.FromJson for PullRequestLinks
+
+pub(all) enum PullSort {
+  Created
+  Updated
+  Popularity
+  LongRunning
+}
+pub fn PullSort::as_query(Self) -> String
+pub impl Eq for PullSort
+pub impl Show for PullSort
+pub impl ToJson for PullSort
+
+pub struct PullsHandler {
+  crab : Octorab
+  owner : String
+  repo : String
+}
+pub async fn PullsHandler::get(Self, Int) -> PullRequest
+pub async fn PullsHandler::list(Self, state? : IssueState, head? : String, base? : String, sort? : PullSort, direction? : SortDirection, per_page? : Int, page? : Int) -> Page[PullRequest]
+pub async fn PullsHandler::list_files(Self, Int, per_page? : Int, page? : Int) -> Page[PullRequestFile]
+
+pub(all) enum RepoSort {
+  Stars
+  Forks
+  Updated
+}
+pub fn RepoSort::as_query(Self) -> String
+pub impl Eq for RepoSort
+pub impl Show for RepoSort
+pub impl ToJson for RepoSort
+
+pub struct ReposHandler {
+  crab : Octorab
+  owner : String
+  repo : String
+}
+pub fn ReposHandler::commits(Self) -> CommitsHandler
+pub async fn ReposHandler::get(Self) -> Repository
+pub async fn ReposHandler::get_contents(Self, path? : String, ref_name? : String) -> Json
+pub async fn ReposHandler::get_release(Self, Int) -> Json
+pub fn ReposHandler::issues(Self) -> IssuesHandler
+pub async fn ReposHandler::list_branches(Self, per_page? : Int, page? : Int) -> Page[Json]
+pub async fn ReposHandler::list_contributors(Self, anon? : Bool, per_page? : Int, page? : Int) -> Page[Json]
+pub async fn ReposHandler::list_events(Self, per_page? : Int, page? : Int) -> Page[Json]
+pub async fn ReposHandler::list_forks(Self, sort? : String, per_page? : Int, page? : Int) -> Page[Repository]
+pub async fn ReposHandler::list_languages(Self) -> Json
+pub async fn ReposHandler::list_releases(Self, per_page? : Int, page? : Int) -> Page[Json]
+pub async fn ReposHandler::list_stargazers(Self, per_page? : Int, page? : Int) -> Page[User]
+pub async fn ReposHandler::list_tags(Self, per_page? : Int, page? : Int) -> Page[Json]
+pub async fn ReposHandler::list_teams(Self, per_page? : Int, page? : Int) -> Page[Json]
+pub async fn ReposHandler::list_watchers(Self, per_page? : Int, page? : Int) -> Page[User]
+pub fn ReposHandler::pulls(Self) -> PullsHandler
+
+pub struct Repository {
+  id : Int
+  name : String
+  full_name : String?
+  private : Bool?
+  owner : User?
+  html_url : String?
+  description : String?
+  fork : Bool?
+  stargazers_count : Int?
+  watchers_count : Int?
+  language : String?
+  default_branch : String?
+}
+pub impl Eq for Repository
+pub impl Show for Repository
+pub impl ToJson for Repository
+pub impl @json.FromJson for Repository
+
+type SearchPage[T]
+pub impl[T : @json.FromJson] @json.FromJson for SearchPage[T]
+
+pub(all) enum SortDirection {
+  Asc
+  Desc
+}
+pub fn SortDirection::as_query(Self) -> String
+pub impl Eq for SortDirection
+pub impl Show for SortDirection
+pub impl ToJson for SortDirection
+
+pub struct TeamsHandler {
+  crab : Octorab
+  org : String
+}
+pub async fn TeamsHandler::get(Self, String) -> Json
+pub async fn TeamsHandler::list(Self, per_page? : Int, page? : Int) -> Page[Json]
+pub async fn TeamsHandler::list_members(Self, String, per_page? : Int, page? : Int) -> Page[User]
+pub async fn TeamsHandler::list_repos(Self, String, per_page? : Int, page? : Int) -> Page[Repository]
+
+pub struct User {
+  login : String
+  id : Int
+  node_id : String?
+  avatar_url : String?
+  html_url : String?
+}
+pub impl Eq for User
+pub impl Show for User
+pub impl ToJson for User
+pub impl @json.FromJson for User
+
+pub struct WorkflowsHandler {
+  crab : Octorab
+  owner : String
+  repo : String
+}
+pub async fn WorkflowsHandler::dispatch(Self, String, String, inputs? : Json) -> Unit
+pub async fn WorkflowsHandler::get_run(Self, Int) -> Json
+pub async fn WorkflowsHandler::list(Self, per_page? : Int, page? : Int) -> Json
+pub async fn WorkflowsHandler::list_jobs(Self, Int, filter? : String, per_page? : Int, page? : Int) -> Json
+pub async fn WorkflowsHandler::list_runs(Self, actor? : String, branch? : String, event? : String, status? : String, per_page? : Int, page? : Int, exclude_pull_requests? : Bool) -> Json
+pub async fn WorkflowsHandler::list_runs_for_workflow(Self, String, actor? : String, branch? : String, event? : String, status? : String, per_page? : Int, page? : Int, exclude_pull_requests? : Bool) -> Json
+
+// Type aliases
+
+// Traits
+
