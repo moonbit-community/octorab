@@ -334,7 +334,14 @@ pub async fn[T : FromJson] Octorab::get_page(
     query~,
     headers~,
   )
-  let json = data.json()
+  if response.code == 204 {
+    return Page::empty()
+  }
+  let bytes = data.binary()
+  if bytes.length() == 0 {
+    return Page::empty()
+  }
+  let json = bytes |> @utf8.decode |> @json.parse
   parse_page(json, response.headers)
 }
 

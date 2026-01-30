@@ -2,8 +2,8 @@
   "name": "myfreess/octorab",
   "version": "0.1.0",
   "deps": {
-    "moonbitlang/async": "0.16.1",
-    "tonyfettes/url": "0.1.2"
+    "tonyfettes/url": "0.1.2",
+    "moonbitlang/async": "0.16.4"
   },
   "readme": "README.mbt.md",
   "repository": "",

@@ -8,6 +8,9 @@
     "moonbitlang/core/strconv",
     "tonyfettes/url"
   ],
+  "test-import": [
+    "moonbitlang/async"
+  ],
   "supported-targets": [
     "native"
   ]
