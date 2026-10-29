@@ -11,13 +11,13 @@ pub fn Octorab::checks(
   owner : String,
   repo : String,
 ) -> ChecksHandler {
-  { crab: self, owner, repo }
+  { crab: self, owner, repo, }
 }
 
 ///|
 pub async fn ChecksHandler::get(
   self : ChecksHandler,
-  check_run_id : Int,
+  check_run_id : Int32,
 ) -> Json {
   self.crab.get("/repos/\{self.owner}/\{self.repo}/check-runs/\{check_run_id}")
 }
@@ -29,10 +29,10 @@ pub async fn ChecksHandler::list_for_ref(
   check_name? : String,
   status? : String,
   filter? : String,
-  per_page? : Int,
-  page? : Int,
+  per_page? : Int32,
+  page? : Int32,
 ) -> Json {
-  let params : Map[String, String] = {}
+  let params : Map[String, String] = Map([])
   add_query(params, "check_name", check_name)
   add_query(params, "status", status)
   add_query(params, "filter", filter)

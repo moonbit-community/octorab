@@ -11,7 +11,7 @@ pub fn Octorab::repos(
   owner : String,
   repo : String,
 ) -> ReposHandler {
-  { crab: self, owner, repo }
+  { crab: self, owner, repo, }
 }
 
 ///|
@@ -37,10 +37,10 @@ pub fn ReposHandler::commits(self : ReposHandler) -> CommitsHandler {
 ///|
 pub async fn ReposHandler::list_branches(
   self : ReposHandler,
-  per_page? : Int,
-  page? : Int,
+  per_page? : Int32,
+  page? : Int32,
 ) -> Page[Json] {
-  let params : Map[String, String] = {}
+  let params : Map[String, String] = Map([])
   add_query_int(params, "per_page", per_page)
   add_query_int(params, "page", page)
   self.crab.get_page("/repos/\{self.owner}/\{self.repo}/branches", query=params)
@@ -49,10 +49,10 @@ pub async fn ReposHandler::list_branches(
 ///|
 pub async fn ReposHandler::list_tags(
   self : ReposHandler,
-  per_page? : Int,
-  page? : Int,
+  per_page? : Int32,
+  page? : Int32,
 ) -> Page[Json] {
-  let params : Map[String, String] = {}
+  let params : Map[String, String] = Map([])
   add_query_int(params, "per_page", per_page)
   add_query_int(params, "page", page)
   self.crab.get_page("/repos/\{self.owner}/\{self.repo}/tags", query=params)
@@ -62,10 +62,10 @@ pub async fn ReposHandler::list_tags(
 pub async fn ReposHandler::list_contributors(
   self : ReposHandler,
   anon? : Bool,
-  per_page? : Int,
-  page? : Int,
+  per_page? : Int32,
+  page? : Int32,
 ) -> Page[Json] {
-  let params : Map[String, String] = {}
+  let params : Map[String, String] = Map([])
   add_query_bool(params, "anon", anon)
   add_query_int(params, "per_page", per_page)
   add_query_int(params, "page", page)
@@ -84,10 +84,10 @@ pub async fn ReposHandler::list_languages(self : ReposHandler) -> Json {
 pub async fn ReposHandler::list_forks(
   self : ReposHandler,
   sort? : String,
-  per_page? : Int,
-  page? : Int,
+  per_page? : Int32,
+  page? : Int32,
 ) -> Page[Repository] {
-  let params : Map[String, String] = {}
+  let params : Map[String, String] = Map([])
   add_query(params, "sort", sort)
   add_query_int(params, "per_page", per_page)
   add_query_int(params, "page", page)
@@ -97,10 +97,10 @@ pub async fn ReposHandler::list_forks(
 ///|
 pub async fn ReposHandler::list_releases(
   self : ReposHandler,
-  per_page? : Int,
-  page? : Int,
+  per_page? : Int32,
+  page? : Int32,
 ) -> Page[Json] {
-  let params : Map[String, String] = {}
+  let params : Map[String, String] = Map([])
   add_query_int(params, "per_page", per_page)
   add_query_int(params, "page", page)
   self.crab.get_page("/repos/\{self.owner}/\{self.repo}/releases", query=params)
@@ -109,7 +109,7 @@ pub async fn ReposHandler::list_releases(
 ///|
 pub async fn ReposHandler::get_release(
   self : ReposHandler,
-  release_id : Int,
+  release_id : Int32,
 ) -> Json {
   self.crab.get("/repos/\{self.owner}/\{self.repo}/releases/\{release_id}")
 }
@@ -117,10 +117,10 @@ pub async fn ReposHandler::get_release(
 ///|
 pub async fn ReposHandler::list_stargazers(
   self : ReposHandler,
-  per_page? : Int,
-  page? : Int,
+  per_page? : Int32,
+  page? : Int32,
 ) -> Page[User] {
-  let params : Map[String, String] = {}
+  let params : Map[String, String] = Map([])
   add_query_int(params, "per_page", per_page)
   add_query_int(params, "page", page)
   self.crab.get_page(
@@ -132,10 +132,10 @@ pub async fn ReposHandler::list_stargazers(
 ///|
 pub async fn ReposHandler::list_watchers(
   self : ReposHandler,
-  per_page? : Int,
-  page? : Int,
+  per_page? : Int32,
+  page? : Int32,
 ) -> Page[User] {
-  let params : Map[String, String] = {}
+  let params : Map[String, String] = Map([])
   add_query_int(params, "per_page", per_page)
   add_query_int(params, "page", page)
   self.crab.get_page(
@@ -147,10 +147,10 @@ pub async fn ReposHandler::list_watchers(
 ///|
 pub async fn ReposHandler::list_events(
   self : ReposHandler,
-  per_page? : Int,
-  page? : Int,
+  per_page? : Int32,
+  page? : Int32,
 ) -> Page[Json] {
-  let params : Map[String, String] = {}
+  let params : Map[String, String] = Map([])
   add_query_int(params, "per_page", per_page)
   add_query_int(params, "page", page)
   self.crab.get_page("/repos/\{self.owner}/\{self.repo}/events", query=params)
@@ -159,10 +159,10 @@ pub async fn ReposHandler::list_events(
 ///|
 pub async fn ReposHandler::list_teams(
   self : ReposHandler,
-  per_page? : Int,
-  page? : Int,
+  per_page? : Int32,
+  page? : Int32,
 ) -> Page[Json] {
-  let params : Map[String, String] = {}
+  let params : Map[String, String] = Map([])
   add_query_int(params, "per_page", per_page)
   add_query_int(params, "page", page)
   self.crab.get_page("/repos/\{self.owner}/\{self.repo}/teams", query=params)
@@ -174,7 +174,7 @@ pub async fn ReposHandler::get_contents(
   path? : String,
   ref_name? : String,
 ) -> Json {
-  let params : Map[String, String] = {}
+  let params : Map[String, String] = Map([])
   add_query(params, "ref", ref_name)
   let full_path = match path {
     Some(p) => "/repos/\{self.owner}/\{self.repo}/contents/\{p}"

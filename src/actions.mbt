@@ -11,16 +11,16 @@ pub fn Octorab::actions(
   owner : String,
   repo : String,
 ) -> ActionsHandler {
-  { crab: self, owner, repo }
+  { crab: self, owner, repo, }
 }
 
 ///|
 pub async fn ActionsHandler::list_workflows(
   self : ActionsHandler,
-  per_page? : Int,
-  page? : Int,
+  per_page? : Int32,
+  page? : Int32,
 ) -> Json {
-  let params : Map[String, String] = {}
+  let params : Map[String, String] = Map([])
   add_query_int(params, "per_page", per_page)
   add_query_int(params, "page", page)
   self.crab.get(
@@ -32,7 +32,7 @@ pub async fn ActionsHandler::list_workflows(
 ///|
 pub async fn ActionsHandler::get_workflow(
   self : ActionsHandler,
-  workflow_id : Int,
+  workflow_id : Int32,
 ) -> Json {
   self.crab.get(
     "/repos/\{self.owner}/\{self.repo}/actions/workflows/\{workflow_id}",
@@ -46,10 +46,10 @@ pub async fn ActionsHandler::list_runs(
   branch? : String,
   event? : String,
   status? : String,
-  per_page? : Int,
-  page? : Int,
+  per_page? : Int32,
+  page? : Int32,
 ) -> Json {
-  let params : Map[String, String] = {}
+  let params : Map[String, String] = Map([])
   add_query(params, "actor", actor)
   add_query(params, "branch", branch)
   add_query(params, "event", event)
@@ -62,15 +62,15 @@ pub async fn ActionsHandler::list_runs(
 ///|
 pub async fn ActionsHandler::list_workflow_runs(
   self : ActionsHandler,
-  workflow_id : Int,
+  workflow_id : Int32,
   actor? : String,
   branch? : String,
   event? : String,
   status? : String,
-  per_page? : Int,
-  page? : Int,
+  per_page? : Int32,
+  page? : Int32,
 ) -> Json {
-  let params : Map[String, String] = {}
+  let params : Map[String, String] = Map([])
   add_query(params, "actor", actor)
   add_query(params, "branch", branch)
   add_query(params, "event", event)
@@ -86,11 +86,11 @@ pub async fn ActionsHandler::list_workflow_runs(
 ///|
 pub async fn ActionsHandler::list_jobs(
   self : ActionsHandler,
-  run_id : Int,
-  per_page? : Int,
-  page? : Int,
+  run_id : Int32,
+  per_page? : Int32,
+  page? : Int32,
 ) -> Json {
-  let params : Map[String, String] = {}
+  let params : Map[String, String] = Map([])
   add_query_int(params, "per_page", per_page)
   add_query_int(params, "page", page)
   self.crab.get(
@@ -102,11 +102,11 @@ pub async fn ActionsHandler::list_jobs(
 ///|
 pub async fn ActionsHandler::list_run_artifacts(
   self : ActionsHandler,
-  run_id : Int,
-  per_page? : Int,
-  page? : Int,
+  run_id : Int32,
+  per_page? : Int32,
+  page? : Int32,
 ) -> Page[Json] {
-  let params : Map[String, String] = {}
+  let params : Map[String, String] = Map([])
   add_query_int(params, "per_page", per_page)
   add_query_int(params, "page", page)
   self.crab.get_page(
@@ -118,7 +118,7 @@ pub async fn ActionsHandler::list_run_artifacts(
 ///|
 pub async fn ActionsHandler::get_artifact(
   self : ActionsHandler,
-  artifact_id : Int,
+  artifact_id : Int32,
 ) -> Json {
   self.crab.get(
     "/repos/\{self.owner}/\{self.repo}/actions/artifacts/\{artifact_id}",
@@ -128,7 +128,7 @@ pub async fn ActionsHandler::get_artifact(
 ///|
 pub async fn ActionsHandler::delete_artifact(
   self : ActionsHandler,
-  artifact_id : Int,
+  artifact_id : Int32,
 ) -> Unit {
   self.crab.delete(
     "/repos/\{self.owner}/\{self.repo}/actions/artifacts/\{artifact_id}",
@@ -138,8 +138,8 @@ pub async fn ActionsHandler::delete_artifact(
 ///|
 pub async fn ActionsHandler::download_artifact(
   self : ActionsHandler,
-  artifact_id : Int,
-  archive_format? : String = "zip",
+  artifact_id : Int32,
+  archive_format~ : String = "zip",
 ) -> &@io.Data {
   let (_response, data) = self.crab.get_raw(
     "/repos/\{self.owner}/\{self.repo}/actions/artifacts/\{artifact_id}/\{archive_format}",
@@ -154,7 +154,7 @@ pub async fn ActionsHandler::dispatch_workflow(
   workflow_ref : String,
   inputs? : Json,
 ) -> Unit {
-  let payload : Map[String, Json] = {}
+  let payload : Map[String, Json] = Map([])
   payload["ref"] = Json::string(workflow_ref)
   if inputs is Some(value) {
     payload["inputs"] = value
@@ -173,7 +173,7 @@ pub async fn ActionsHandler::dispatch_workflow(
 ///|
 pub async fn ActionsHandler::cancel_run(
   self : ActionsHandler,
-  run_id : Int,
+  run_id : Int32,
 ) -> Unit {
   let _ = self.crab.request(
     @http.RequestMethod::Post,
@@ -183,7 +183,10 @@ pub async fn ActionsHandler::cancel_run(
 }
 
 ///|
-pub async fn ActionsHandler::rerun(self : ActionsHandler, run_id : Int) -> Unit {
+pub async fn ActionsHandler::rerun(
+  self : ActionsHandler,
+  run_id : Int32,
+) -> Unit {
   let _ = self.crab.request(
     @http.RequestMethod::Post,
     "/repos/\{self.owner}/\{self.repo}/actions/runs/\{run_id}/rerun",
@@ -194,7 +197,7 @@ pub async fn ActionsHandler::rerun(self : ActionsHandler, run_id : Int) -> Unit 
 ///|
 pub async fn ActionsHandler::rerun_failed_jobs(
   self : ActionsHandler,
-  run_id : Int,
+  run_id : Int32,
 ) -> Unit {
   let _ = self.crab.request(
     @http.RequestMethod::Post,
@@ -207,10 +210,10 @@ pub async fn ActionsHandler::rerun_failed_jobs(
 pub async fn ActionsHandler::list_self_hosted_runners(
   self : ActionsHandler,
   name? : String,
-  per_page? : Int,
-  page? : Int,
+  per_page? : Int32,
+  page? : Int32,
 ) -> Json {
-  let params : Map[String, String] = {}
+  let params : Map[String, String] = Map([])
   add_query(params, "name", name)
   add_query_int(params, "per_page", per_page)
   add_query_int(params, "page", page)
@@ -224,11 +227,11 @@ pub async fn ActionsHandler::list_self_hosted_runners(
 pub async fn ActionsHandler::create_jit_runner_config(
   self : ActionsHandler,
   name : String,
-  runner_group_id : Int,
+  runner_group_id : Int32,
   labels : Array[String],
   work_folder? : String,
 ) -> Json {
-  let payload : Map[String, Json] = {}
+  let payload : Map[String, Json] = Map([])
   payload["name"] = Json::string(name)
   payload["runner_group_id"] = Json::number(runner_group_id.to_double())
   payload["labels"] = Json::array(labels.map(Json::string))

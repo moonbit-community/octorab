@@ -5,7 +5,7 @@ pub struct LicensesHandler {
 
 ///|
 pub fn Octorab::licenses(self : Octorab) -> LicensesHandler {
-  { crab: self }
+  { crab: self, }
 }
 
 ///|

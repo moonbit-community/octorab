@@ -4,10 +4,10 @@ pub async fn Octorab::search_repositories(
   query : String,
   sort? : RepoSort,
   order? : SortDirection,
-  per_page? : Int,
-  page? : Int,
+  per_page? : Int32,
+  page? : Int32,
 ) -> Page[Repository] {
-  let params : Map[String, String] = {}
+  let params : Map[String, String] = Map([])
   params["q"] = query
   if sort is Some(sort) {
     add_query(params, "sort", Some(sort.as_query()))
@@ -26,10 +26,10 @@ pub async fn Octorab::search_issues(
   query : String,
   sort? : PullSort,
   order? : SortDirection,
-  per_page? : Int,
-  page? : Int,
+  per_page? : Int32,
+  page? : Int32,
 ) -> Page[Json] {
-  let params : Map[String, String] = {}
+  let params : Map[String, String] = Map([])
   params["q"] = query
   if sort is Some(sort) {
     add_query(params, "sort", Some(sort.as_query()))
@@ -48,10 +48,10 @@ pub async fn Octorab::search_code(
   query : String,
   sort? : String,
   order? : SortDirection,
-  per_page? : Int,
-  page? : Int,
+  per_page? : Int32,
+  page? : Int32,
 ) -> Page[Json] {
-  let params : Map[String, String] = {}
+  let params : Map[String, String] = Map([])
   params["q"] = query
   add_query(params, "sort", sort)
   if order is Some(order) {
@@ -68,10 +68,10 @@ pub async fn Octorab::search_users(
   query : String,
   sort? : String,
   order? : SortDirection,
-  per_page? : Int,
-  page? : Int,
+  per_page? : Int32,
+  page? : Int32,
 ) -> Page[User] {
-  let params : Map[String, String] = {}
+  let params : Map[String, String] = Map([])
   params["q"] = query
   add_query(params, "sort", sort)
   if order is Some(order) {

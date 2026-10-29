@@ -5,7 +5,7 @@ pub async fn Octorab::graphql(
   variables? : Json,
   operation_name? : String,
 ) -> Json {
-  let payload : Map[String, Json] = {}
+  let payload : Map[String, Json] = Map([])
   payload["query"] = Json::string(query)
   if variables is Some(vars) {
     payload["variables"] = vars

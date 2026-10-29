@@ -6,7 +6,7 @@ pub struct OrgsHandler {
 
 ///|
 pub fn Octorab::orgs(self : Octorab, org : String) -> OrgsHandler {
-  { crab: self, org }
+  { crab: self, org, }
 }
 
 ///|
@@ -20,10 +20,10 @@ pub async fn OrgsHandler::list_repos(
   repo_type? : OrgRepoType,
   sort? : OrgRepoSort,
   direction? : SortDirection,
-  per_page? : Int,
-  page? : Int,
+  per_page? : Int32,
+  page? : Int32,
 ) -> Page[Repository] {
-  let params : Map[String, String] = {}
+  let params : Map[String, String] = Map([])
   if repo_type is Some(repo_type) {
     add_query(params, "type", Some(repo_type.as_query()))
   }
@@ -43,10 +43,10 @@ pub async fn OrgsHandler::list_members(
   self : OrgsHandler,
   filter? : OrgMemberFilter,
   role? : OrgMemberRole,
-  per_page? : Int,
-  page? : Int,
+  per_page? : Int32,
+  page? : Int32,
 ) -> Page[User] {
-  let params : Map[String, String] = {}
+  let params : Map[String, String] = Map([])
   if filter is Some(filter) {
     add_query(params, "filter", Some(filter.as_query()))
   }

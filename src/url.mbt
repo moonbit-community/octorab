@@ -1,6 +1,6 @@
 ///|
 fn parse_base_url(url : String) -> (String, String) raise OctorabError {
-  match @url.Url::parse(url) {
+  match @url.Url::try_parse(url) {
     Some(parsed) => {
       let origin = parsed.origin()
       let path = parsed.pathname()
@@ -12,7 +12,7 @@ fn parse_base_url(url : String) -> (String, String) raise OctorabError {
 
 ///|
 fn parse_absolute_url(url : String) -> @url.Url raise OctorabError {
-  match @url.Url::parse(url) {
+  match @url.Url::try_parse(url) {
     Some(parsed) => parsed
     None => raise OctorabError::InvalidUrl(url)
   }
@@ -24,7 +24,7 @@ fn normalize_prefix(prefix : String) -> String {
     ""
   } else if prefix.has_suffix("/") {
     let len = prefix.length()
-    try! prefix[0:len - 1].to_string()
+    prefix[0:len - 1].to_owned()
   } else {
     prefix
   }
@@ -120,7 +120,7 @@ fn add_query(
 fn add_query_int(
   params : Map[String, String],
   key : String,
-  value : Int?,
+  value : Int32?,
 ) -> Unit {
   if value is Some(v) {
     params[key] = v.to_string()
@@ -155,7 +155,7 @@ fn apply_query_params(url : @url.Url, params : Map[String, String]) -> Unit {
     return
   }
   let existing = url.search()
-  let base = if existing == "" { "" } else { try! existing[1:].to_string() }
+  let base = if existing == "" { "" } else { existing[1:].to_owned() }
   let extra = build_query(params)
   let merged = merge_query_string(base, extra)
   if merged != "" {
@@ -166,8 +166,8 @@ fn apply_query_params(url : @url.Url, params : Map[String, String]) -> Unit {
 ///|
 fn split_path_query(path : String) -> (String, String?) {
   if path.find("?") is Some(i) {
-    let base = try! path[:i].to_string()
-    let query = try! path[i + 1:].to_string()
+    let base = path[:i].to_owned()
+    let query = path[i + 1:].to_owned()
     (base, Some(query))
   } else {
     (path, None)
@@ -181,7 +181,7 @@ fn resolve_request_target(
   url_or_path : String,
   params : Map[String, String],
 ) -> (String, String) raise OctorabError {
-  match @url.Url::parse(url_or_path) {
+  match @url.Url::try_parse(url_or_path) {
     Some(parsed) => {
       apply_query_params(parsed, params)
       let path = "\{parsed.pathname()}\{parsed.search()}"

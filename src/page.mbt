@@ -8,7 +8,7 @@ pub struct PageLinks {
 
 ///|
 pub fn PageLinks::empty() -> PageLinks {
-  { next: None, prev: None, first: None, last: None }
+  { next: None, prev: None, first: None, last: None, }
 }
 
 ///|
@@ -18,7 +18,7 @@ pub struct Page[T] {
   prev : String?
   first : String?
   last : String?
-  total_count : Int?
+  total_count : Int32?
   incomplete_results : Bool?
 }
 
@@ -42,7 +42,7 @@ pub fn[T] Page::take_items(self : Page[T]) -> Array[T] {
 
 ///|
 struct SearchPage[T] {
-  total_count : Int?
+  total_count : Int32?
   incomplete_results : Bool?
   items : Array[T]
 } derive(FromJson)
@@ -51,10 +51,10 @@ struct SearchPage[T] {
 fn parse_link_header(value : String) -> PageLinks {
   let links = PageLinks::empty()
   for raw_part in value.split(",") {
-    let part = raw_part.trim().to_string()
+    let part = raw_part.trim().to_owned()
     guard part.has_prefix("<") else { continue }
     guard part.find(">") is Some(end_index) else { continue }
-    let url = try! part[1:end_index].to_string()
+    let url = part[1:end_index].to_owned()
     let rel = find_rel(part)
     match rel {
       Some("next") => links.next = Some(url)
@@ -72,9 +72,9 @@ fn find_rel(part : String) -> String? {
   let key = "rel=\""
   guard part.find(key) is Some(start) else { return None }
   let from = start + key.length()
-  let rest = try! part[from:].to_string()
+  let rest = part[from:].to_owned()
   guard rest.find("\"") is Some(end_index) else { return None }
-  Some(try! part[from:from + end_index].to_string())
+  Some(part[from:from + end_index].to_owned())
 }
 
 ///|

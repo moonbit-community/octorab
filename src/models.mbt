@@ -1,7 +1,7 @@
 ///|
 pub struct User {
   login : String
-  id : Int
+  id : Int32
   node_id : String?
   avatar_url : String?
   html_url : String?
@@ -9,7 +9,7 @@ pub struct User {
 
 ///|
 pub struct Repository {
-  id : Int
+  id : Int32
   name : String
   full_name : String?
   private : Bool?
@@ -17,8 +17,8 @@ pub struct Repository {
   html_url : String?
   description : String?
   fork : Bool?
-  stargazers_count : Int?
-  watchers_count : Int?
+  stargazers_count : Int32?
+  watchers_count : Int32?
   language : String?
   default_branch : String?
 } derive(Show, Eq, ToJson)
@@ -33,13 +33,13 @@ pub struct PullRequestLinks {
 
 ///|
 pub struct Issue {
-  id : Int
-  number : Int
+  id : Int32
+  number : Int32
   title : String
   state : String?
   user : User?
   body : String?
-  comments : Int?
+  comments : Int32?
   html_url : String?
   pull_request : PullRequestLinks?
 } derive(Show, Eq, ToJson, FromJson)
@@ -47,7 +47,7 @@ pub struct Issue {
 ///|
 pub struct Organization {
   login : String
-  id : Int
+  id : Int32
   name : String?
   description : String?
   html_url : String?
@@ -56,8 +56,8 @@ pub struct Organization {
 
 ///|
 pub struct PullRequest {
-  id : Int
-  number : Int
+  id : Int32
+  number : Int32
   title : String
   state : String?
   user : User?
@@ -73,9 +73,9 @@ pub struct PullRequestFile {
   sha : String
   filename : String
   status : String?
-  additions : Int?
-  deletions : Int?
-  changes : Int?
+  additions : Int32?
+  deletions : Int32?
+  changes : Int32?
   patch : String?
 } derive(Show, Eq, ToJson, FromJson)
 
@@ -105,13 +105,13 @@ fn[T : @json.FromJson] decode_optional(
 }
 
 ///|
-pub impl @json.FromJson for Repository with from_json(json, path) {
+pub impl @json.FromJson for Repository with fn from_json(json, path) {
   guard json is Json::Object(map) else {
     raise @json.JsonDecodeError(
       (path, "Repository::from_json: expected object"),
     )
   }
-  let id : Int = decode_required(map, "id", path)
+  let id : Int32 = decode_required(map, "id", path)
   let name : String = decode_required(map, "name", path)
   let full_name : String? = decode_optional(map, "full_name", path)
   let private_ : Bool? = decode_optional(map, "private", path)
@@ -119,8 +119,8 @@ pub impl @json.FromJson for Repository with from_json(json, path) {
   let html_url : String? = decode_optional(map, "html_url", path)
   let description : String? = decode_optional(map, "description", path)
   let fork : Bool? = decode_optional(map, "fork", path)
-  let stargazers_count : Int? = decode_optional(map, "stargazers_count", path)
-  let watchers_count : Int? = decode_optional(map, "watchers_count", path)
+  let stargazers_count : Int32? = decode_optional(map, "stargazers_count", path)
+  let watchers_count : Int32? = decode_optional(map, "watchers_count", path)
   let language : String? = decode_optional(map, "language", path)
   let default_branch : String? = decode_optional(map, "default_branch", path)
   {

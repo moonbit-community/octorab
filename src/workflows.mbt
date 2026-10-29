@@ -11,16 +11,16 @@ pub fn Octorab::workflows(
   owner : String,
   repo : String,
 ) -> WorkflowsHandler {
-  { crab: self, owner, repo }
+  { crab: self, owner, repo, }
 }
 
 ///|
 pub async fn WorkflowsHandler::list(
   self : WorkflowsHandler,
-  per_page? : Int,
-  page? : Int,
+  per_page? : Int32,
+  page? : Int32,
 ) -> Json {
-  let params : Map[String, String] = {}
+  let params : Map[String, String] = Map([])
   add_query_int(params, "per_page", per_page)
   add_query_int(params, "page", page)
   self.crab.get(
@@ -32,7 +32,7 @@ pub async fn WorkflowsHandler::list(
 ///|
 pub async fn WorkflowsHandler::get_run(
   self : WorkflowsHandler,
-  run_id : Int,
+  run_id : Int32,
 ) -> Json {
   self.crab.get("/repos/\{self.owner}/\{self.repo}/actions/runs/\{run_id}")
 }
@@ -44,11 +44,11 @@ pub async fn WorkflowsHandler::list_runs(
   branch? : String,
   event? : String,
   status? : String,
-  per_page? : Int,
-  page? : Int,
+  per_page? : Int32,
+  page? : Int32,
   exclude_pull_requests? : Bool,
 ) -> Json {
-  let params : Map[String, String] = {}
+  let params : Map[String, String] = Map([])
   add_query(params, "actor", actor)
   add_query(params, "branch", branch)
   add_query(params, "event", event)
@@ -67,11 +67,11 @@ pub async fn WorkflowsHandler::list_runs_for_workflow(
   branch? : String,
   event? : String,
   status? : String,
-  per_page? : Int,
-  page? : Int,
+  per_page? : Int32,
+  page? : Int32,
   exclude_pull_requests? : Bool,
 ) -> Json {
-  let params : Map[String, String] = {}
+  let params : Map[String, String] = Map([])
   add_query(params, "actor", actor)
   add_query(params, "branch", branch)
   add_query(params, "event", event)
@@ -88,12 +88,12 @@ pub async fn WorkflowsHandler::list_runs_for_workflow(
 ///|
 pub async fn WorkflowsHandler::list_jobs(
   self : WorkflowsHandler,
-  run_id : Int,
+  run_id : Int32,
   filter? : String,
-  per_page? : Int,
-  page? : Int,
+  per_page? : Int32,
+  page? : Int32,
 ) -> Json {
-  let params : Map[String, String] = {}
+  let params : Map[String, String] = Map([])
   add_query(params, "filter", filter)
   add_query_int(params, "per_page", per_page)
   add_query_int(params, "page", page)
@@ -110,7 +110,7 @@ pub async fn WorkflowsHandler::dispatch(
   workflow_ref : String,
   inputs? : Json,
 ) -> Unit {
-  let payload : Map[String, Json] = {}
+  let payload : Map[String, Json] = Map([])
   payload["ref"] = Json::string(workflow_ref)
   if inputs is Some(value) {
     payload["inputs"] = value

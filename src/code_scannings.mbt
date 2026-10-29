@@ -11,13 +11,13 @@ pub fn Octorab::code_scannings(
   owner : String,
   repo : String,
 ) -> CodeScanningsHandler {
-  { crab: self, owner, repo }
+  { crab: self, owner, repo, }
 }
 
 ///|
 pub async fn CodeScanningsHandler::get(
   self : CodeScanningsHandler,
-  alert_number : Int,
+  alert_number : Int32,
 ) -> Json {
   self.crab.get(
     "/repos/\{self.owner}/\{self.repo}/code-scanning/alerts/\{alert_number}",
@@ -34,10 +34,10 @@ pub async fn CodeScanningsHandler::list(
   reference? : String,
   sort? : String,
   direction? : String,
-  per_page? : Int,
-  page? : Int,
+  per_page? : Int32,
+  page? : Int32,
 ) -> Page[Json] {
-  let params : Map[String, String] = {}
+  let params : Map[String, String] = Map([])
   add_query(params, "state", state)
   add_query(params, "severity", severity)
   add_query(params, "tool_name", tool_name)
@@ -56,12 +56,12 @@ pub async fn CodeScanningsHandler::list(
 ///|
 pub async fn CodeScanningsHandler::update(
   self : CodeScanningsHandler,
-  alert_number : Int,
+  alert_number : Int32,
   state? : String,
   dismissed_reason? : String,
   dismissed_comment? : String,
 ) -> Json {
-  let payload : Map[String, Json] = {}
+  let payload : Map[String, Json] = Map([])
   if state is Some(value) {
     payload["state"] = Json::string(value)
   }

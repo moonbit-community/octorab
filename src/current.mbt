@@ -5,7 +5,7 @@ pub struct CurrentHandler {
 
 ///|
 pub fn Octorab::current(self : Octorab) -> CurrentHandler {
-  { crab: self }
+  { crab: self, }
 }
 
 ///|
@@ -31,10 +31,10 @@ pub async fn CurrentHandler::list_repos_starred(
   self : CurrentHandler,
   sort? : String,
   direction? : SortDirection,
-  per_page? : Int,
-  page? : Int,
+  per_page? : Int32,
+  page? : Int32,
 ) -> Page[Repository] {
-  let params : Map[String, String] = {}
+  let params : Map[String, String] = Map([])
   add_query(params, "sort", sort)
   if direction is Some(value) {
     add_query(params, "direction", Some(value.as_query()))
@@ -52,10 +52,10 @@ pub async fn CurrentHandler::list_repos(
   type_? : String,
   sort? : String,
   direction? : SortDirection,
-  per_page? : Int,
-  page? : Int,
+  per_page? : Int32,
+  page? : Int32,
 ) -> Page[Repository] {
-  let params : Map[String, String] = {}
+  let params : Map[String, String] = Map([])
   add_query(params, "visibility", visibility)
   add_query(params, "affiliation", affiliation)
   add_query(params, "type", type_)
@@ -72,10 +72,10 @@ pub async fn CurrentHandler::list_repos(
 pub async fn CurrentHandler::list_gists(
   self : CurrentHandler,
   since? : String,
-  per_page? : Int,
-  page? : Int,
+  per_page? : Int32,
+  page? : Int32,
 ) -> Page[Json] {
-  let params : Map[String, String] = {}
+  let params : Map[String, String] = Map([])
   add_query(params, "since", since)
   add_query_int(params, "per_page", per_page)
   add_query_int(params, "page", page)
@@ -86,10 +86,10 @@ pub async fn CurrentHandler::list_gists(
 pub async fn CurrentHandler::list_starred_gists(
   self : CurrentHandler,
   since? : String,
-  per_page? : Int,
-  page? : Int,
+  per_page? : Int32,
+  page? : Int32,
 ) -> Page[Json] {
-  let params : Map[String, String] = {}
+  let params : Map[String, String] = Map([])
   add_query(params, "since", since)
   add_query_int(params, "per_page", per_page)
   add_query_int(params, "page", page)
@@ -99,10 +99,10 @@ pub async fn CurrentHandler::list_starred_gists(
 ///|
 pub async fn CurrentHandler::list_app_installations(
   self : CurrentHandler,
-  per_page? : Int,
-  page? : Int,
+  per_page? : Int32,
+  page? : Int32,
 ) -> Json {
-  let params : Map[String, String] = {}
+  let params : Map[String, String] = Map([])
   add_query_int(params, "per_page", per_page)
   add_query_int(params, "page", page)
   self.crab.get("/user/installations", query=params)
@@ -111,10 +111,10 @@ pub async fn CurrentHandler::list_app_installations(
 ///|
 pub async fn CurrentHandler::list_org_memberships(
   self : CurrentHandler,
-  per_page? : Int,
-  page? : Int,
+  per_page? : Int32,
+  page? : Int32,
 ) -> Page[Json] {
-  let params : Map[String, String] = {}
+  let params : Map[String, String] = Map([])
   add_query_int(params, "per_page", per_page)
   add_query_int(params, "page", page)
   self.crab.get_page("/user/memberships/orgs", query=params)

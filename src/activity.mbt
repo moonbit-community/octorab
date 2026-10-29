@@ -5,10 +5,10 @@ pub async fn Octorab::notifications(
   participating? : Bool,
   since? : String,
   before? : String,
-  per_page? : Int,
-  page? : Int,
+  per_page? : Int32,
+  page? : Int32,
 ) -> Page[Json] {
-  let params : Map[String, String] = {}
+  let params : Map[String, String] = Map([])
   add_query_bool(params, "all", all)
   add_query_bool(params, "participating", participating)
   add_query(params, "since", since)
@@ -27,10 +27,10 @@ pub async fn Octorab::repo_notifications(
   participating? : Bool,
   since? : String,
   before? : String,
-  per_page? : Int,
-  page? : Int,
+  per_page? : Int32,
+  page? : Int32,
 ) -> Page[Json] {
-  let params : Map[String, String] = {}
+  let params : Map[String, String] = Map([])
   add_query_bool(params, "all", all)
   add_query_bool(params, "participating", participating)
   add_query(params, "since", since)

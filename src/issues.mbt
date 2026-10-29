@@ -11,11 +11,11 @@ pub fn Octorab::issues(
   owner : String,
   repo : String,
 ) -> IssuesHandler {
-  { crab: self, owner, repo }
+  { crab: self, owner, repo, }
 }
 
 ///|
-pub async fn IssuesHandler::get(self : IssuesHandler, number : Int) -> Issue {
+pub async fn IssuesHandler::get(self : IssuesHandler, number : Int32) -> Issue {
   self.crab.get("/repos/\{self.owner}/\{self.repo}/issues/\{number}")
 }
 
@@ -24,13 +24,13 @@ pub async fn IssuesHandler::list(
   self : IssuesHandler,
   state? : IssueState,
   labels? : Array[String],
-  per_page? : Int,
-  page? : Int,
+  per_page? : Int32,
+  page? : Int32,
   creator? : String,
   assignee? : String,
   since? : String,
 ) -> Page[Issue] {
-  let params : Map[String, String] = {}
+  let params : Map[String, String] = Map([])
   if state is Some(state) {
     add_query(params, "state", Some(state.as_query()))
   }
@@ -53,7 +53,7 @@ pub async fn IssuesHandler::create(
   assignee? : String,
   labels? : Array[String],
 ) -> Issue {
-  let payload : Map[String, Json] = {}
+  let payload : Map[String, Json] = Map([])
   payload["title"] = Json::string(title)
   if body is Some(text) {
     payload["body"] = Json::string(text)
