@@ -5,7 +5,7 @@ pub struct GistsHandler {
 
 ///|
 pub fn Octorab::gists(self : Octorab) -> GistsHandler {
-  { crab: self }
+  { crab: self, }
 }
 
 ///|
@@ -16,10 +16,10 @@ pub async fn GistsHandler::get(self : GistsHandler, gist_id : String) -> Json {
 ///|
 pub async fn GistsHandler::list(
   self : GistsHandler,
-  per_page? : Int,
-  page? : Int,
+  per_page? : Int32,
+  page? : Int32,
 ) -> Page[Json] {
-  let params : Map[String, String] = {}
+  let params : Map[String, String] = Map([])
   add_query_int(params, "per_page", per_page)
   add_query_int(params, "page", page)
   self.crab.get_page("/gists", query=params)
@@ -28,10 +28,10 @@ pub async fn GistsHandler::list(
 ///|
 pub async fn GistsHandler::list_public(
   self : GistsHandler,
-  per_page? : Int,
-  page? : Int,
+  per_page? : Int32,
+  page? : Int32,
 ) -> Page[Json] {
-  let params : Map[String, String] = {}
+  let params : Map[String, String] = Map([])
   add_query_int(params, "per_page", per_page)
   add_query_int(params, "page", page)
   self.crab.get_page("/gists/public", query=params)
@@ -40,10 +40,10 @@ pub async fn GistsHandler::list_public(
 ///|
 pub async fn GistsHandler::list_starred(
   self : GistsHandler,
-  per_page? : Int,
-  page? : Int,
+  per_page? : Int32,
+  page? : Int32,
 ) -> Page[Json] {
-  let params : Map[String, String] = {}
+  let params : Map[String, String] = Map([])
   add_query_int(params, "per_page", per_page)
   add_query_int(params, "page", page)
   self.crab.get_page("/gists/starred", query=params)
@@ -53,10 +53,10 @@ pub async fn GistsHandler::list_starred(
 pub async fn GistsHandler::list_for_user(
   self : GistsHandler,
   username : String,
-  per_page? : Int,
-  page? : Int,
+  per_page? : Int32,
+  page? : Int32,
 ) -> Page[Json] {
-  let params : Map[String, String] = {}
+  let params : Map[String, String] = Map([])
   add_query_int(params, "per_page", per_page)
   add_query_int(params, "page", page)
   self.crab.get_page("/users/\{username}/gists", query=params)

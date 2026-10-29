@@ -1,46 +1,32 @@
 name: check
-
 on:
   push:
-    branches:
-      - main   
+    branches: [main]
   pull_request:
-
+permissions:
+  contents: read
 jobs:
   check:
-    strategy:    
-      fail-fast: false
     runs-on: ubuntu-latest
-    continue-on-error: false
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        channel: [latest, nightly]
     steps:
       - uses: actions/checkout@v4
-
-      - name: install
+      - name: Install MoonBit
         run: |
-          curl -fsSL https://cli.moonbitlang.com/install/unix.sh | bash
-          echo "$HOME/.moon/bin" >> $GITHUB_PATH
-
-      - name: moon version
+          curl -fsSL https://cli.moonbitlang.com/install/unix.sh | bash -s -- ${{ matrix.channel }}
+          echo "$HOME/.moon/bin" >> "$GITHUB_PATH"
+      - name: Validate
         run: |
           moon version --all
-
-      - name: install module dependencies
-        run: |
           moon update
-          moon install
-
-      - name: moon check
-        run: moon check
-
-      - name: format diff
-        run: |
+          # Keep existing public Show implementations during this compatibility repair.
+          moon check --target native --deny-warn --warn-list -20-27
           moon fmt
+          moon info --target native
           git diff --exit-code
-
-      - name: Set ulimit
-        run: |
-          ulimit -s 8176
-
-      - name: moon test
-        run: |
           moon test --target native
+          moon test --target native --release

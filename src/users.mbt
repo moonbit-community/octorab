@@ -11,10 +11,10 @@ pub async fn Octorab::current_user(self : Octorab) -> User {
 ///|
 pub async fn Octorab::current_user_orgs(
   self : Octorab,
-  per_page? : Int,
-  page? : Int,
+  per_page? : Int32,
+  page? : Int32,
 ) -> Page[Organization] {
-  let params : Map[String, String] = {}
+  let params : Map[String, String] = Map([])
   add_query_int(params, "per_page", per_page)
   add_query_int(params, "page", page)
   self.get_page("/user/orgs", query=params)
@@ -24,12 +24,12 @@ pub async fn Octorab::current_user_orgs(
 pub async fn Octorab::list_user_repos(
   self : Octorab,
   username : String,
-  per_page? : Int,
-  page? : Int,
+  per_page? : Int32,
+  page? : Int32,
   sort? : String,
   direction? : SortDirection,
 ) -> Page[Repository] {
-  let params : Map[String, String] = {}
+  let params : Map[String, String] = Map([])
   add_query_int(params, "per_page", per_page)
   add_query_int(params, "page", page)
   add_query(params, "sort", sort)
@@ -43,12 +43,12 @@ pub async fn Octorab::list_user_repos(
 pub async fn Octorab::list_org_repos(
   self : Octorab,
   org : String,
-  per_page? : Int,
-  page? : Int,
+  per_page? : Int32,
+  page? : Int32,
   sort? : String,
   direction? : SortDirection,
 ) -> Page[Repository] {
-  let params : Map[String, String] = {}
+  let params : Map[String, String] = Map([])
   add_query_int(params, "per_page", per_page)
   add_query_int(params, "page", page)
   add_query(params, "sort", sort)
@@ -62,10 +62,10 @@ pub async fn Octorab::list_org_repos(
 pub async fn Octorab::list_user_followers(
   self : Octorab,
   username : String,
-  per_page? : Int,
-  page? : Int,
+  per_page? : Int32,
+  page? : Int32,
 ) -> Page[User] {
-  let params : Map[String, String] = {}
+  let params : Map[String, String] = Map([])
   add_query_int(params, "per_page", per_page)
   add_query_int(params, "page", page)
   self.get_page("/users/\{username}/followers", query=params)
@@ -75,10 +75,10 @@ pub async fn Octorab::list_user_followers(
 pub async fn Octorab::list_user_following(
   self : Octorab,
   username : String,
-  per_page? : Int,
-  page? : Int,
+  per_page? : Int32,
+  page? : Int32,
 ) -> Page[User] {
-  let params : Map[String, String] = {}
+  let params : Map[String, String] = Map([])
   add_query_int(params, "per_page", per_page)
   add_query_int(params, "page", page)
   self.get_page("/users/\{username}/following", query=params)
@@ -88,10 +88,10 @@ pub async fn Octorab::list_user_following(
 pub async fn Octorab::list_user_orgs(
   self : Octorab,
   username : String,
-  per_page? : Int,
-  page? : Int,
+  per_page? : Int32,
+  page? : Int32,
 ) -> Page[Organization] {
-  let params : Map[String, String] = {}
+  let params : Map[String, String] = Map([])
   add_query_int(params, "per_page", per_page)
   add_query_int(params, "page", page)
   self.get_page("/users/\{username}/orgs", query=params)

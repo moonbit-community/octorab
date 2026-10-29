@@ -1,0 +1,11 @@
+import {
+  "moonbitlang/async/http",
+  "moonbitlang/async/io",
+  "moonbitlang/core/encoding/utf8",
+  "moonbitlang/core/json",
+  "tonyfettes/url",
+}
+
+import {
+  "moonbitlang/async",
+} for "test"

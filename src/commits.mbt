@@ -11,7 +11,7 @@ pub fn Octorab::commits(
   owner : String,
   repo : String,
 ) -> CommitsHandler {
-  { crab: self, owner, repo }
+  { crab: self, owner, repo, }
 }
 
 ///|
@@ -27,10 +27,10 @@ pub async fn CommitsHandler::list(
   author? : String,
   since? : String,
   until? : String,
-  per_page? : Int,
-  page? : Int,
+  per_page? : Int32,
+  page? : Int32,
 ) -> Page[Json] {
-  let params : Map[String, String] = {}
+  let params : Map[String, String] = Map([])
   add_query(params, "sha", sha)
   add_query(params, "path", path)
   add_query(params, "author", author)

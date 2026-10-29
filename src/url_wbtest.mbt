@@ -6,7 +6,7 @@ test "percent encode" {
 
 ///|
 test "merge query" {
-  let params : Map[String, String] = {}
+  let params : Map[String, String] = Map([])
   params["q"] = "hello world"
   params["page"] = "2"
   inspect(build_query(params), content="q=hello%20world&page=2")
@@ -14,7 +14,7 @@ test "merge query" {
 
 ///|
 test "resolve request target" {
-  let params : Map[String, String] = {}
+  let params : Map[String, String] = Map([])
   params["q"] = "hello world"
   params["page"] = "2"
   let (origin, path) = resolve_request_target(
@@ -28,12 +28,30 @@ test "resolve request target" {
 test "parse link header" {
   let header = "<https://api.github.com/repositories?since=364>; rel=\"next\", <https://api.github.com/repositories{?since}>; rel=\"first\""
   let links = parse_link_header(header)
-  inspect(
+  debug_inspect(
     links.next,
     content="Some(\"https://api.github.com/repositories?since=364\")",
   )
-  inspect(
+  debug_inspect(
     links.first,
     content="Some(\"https://api.github.com/repositories{?since}\")",
   )
+}
+
+///|
+test "request headers override defaults regardless of casing" {
+  let headers = merge_headers({ "Accept": "default" }, { "accept": "override" })
+  assert_eq(headers.length(), 1)
+  assert_eq(
+    headers.get(@http.CaseInsensitiveString("ACCEPT")),
+    Some("override"),
+  )
+}
+
+///|
+test "invalid base URL preserves OctorabError" {
+  let result = Ok(parse_base_url("not a URL")) catch { e => Err(e) }
+  guard result is Err(OctorabError::InvalidUrl("not a URL")) else {
+    fail("invalid URL should retain the public error type")
+  }
 }

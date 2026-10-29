@@ -5,7 +5,7 @@ pub struct GitignoreHandler {
 
 ///|
 pub fn Octorab::gitignore(self : Octorab) -> GitignoreHandler {
-  { crab: self }
+  { crab: self, }
 }
 
 ///|

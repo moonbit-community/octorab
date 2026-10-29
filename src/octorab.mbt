@@ -24,9 +24,9 @@ pub fn Octorab::default() -> Octorab {
 
 ///|
 pub fn Octorab::new(
-  base_url? : String = default_base_url,
-  user_agent? : String = default_user_agent,
-  api_version? : String = default_api_version,
+  base_url~ : String = default_base_url,
+  user_agent~ : String = default_user_agent,
+  api_version~ : String = default_api_version,
   auth? : Auth,
 ) -> Octorab raise OctorabError {
   let (base_uri, base_path) = parse_base_url(base_url)
@@ -42,7 +42,7 @@ pub fn Octorab::new(
 
 ///|
 pub fn Octorab::with_auth(self : Octorab, auth : Auth) -> Octorab {
-  { ..self, auth: Some(auth) }
+  { ..self, auth: Some(auth), }
 }
 
 ///|
@@ -74,7 +74,7 @@ pub fn Octorab::with_base_url(
   base_url : String,
 ) -> Octorab raise OctorabError {
   let (base_uri, base_path) = parse_base_url(base_url)
-  { ..self, base_uri, base_path: normalize_prefix(base_path) }
+  { ..self, base_uri, base_path: normalize_prefix(base_path), }
 }
 
 ///|
@@ -83,17 +83,17 @@ pub fn Octorab::with_header(
   name : String,
   value : String,
 ) -> Octorab {
-  let headers : Map[String, String] = {}
+  let headers : Map[String, String] = Map([])
   for key, val in self.extra_headers {
     headers[key] = val
   }
   headers[name] = value
-  { ..self, extra_headers: headers }
+  { ..self, extra_headers: headers, }
 }
 
 ///|
 fn Octorab::base_headers(self : Octorab) -> Map[String, String] {
-  let headers : Map[String, String] = {}
+  let headers : Map[String, String] = Map([])
   headers["User-Agent"] = self.user_agent
   headers["Accept"] = "application/vnd.github+json"
   headers["X-GitHub-Api-Version"] = self.api_version
@@ -111,13 +111,13 @@ fn Octorab::base_headers(self : Octorab) -> Map[String, String] {
 fn merge_headers(
   base : Map[String, String],
   extra : Map[String, String],
-) -> Map[String, String] {
-  let merged : Map[String, String] = {}
+) -> Map[@http.CaseInsensitiveString, String] {
+  let merged : Map[@http.CaseInsensitiveString, String] = Map([])
   for key, value in base {
-    merged[key] = value
+    merged[@http.CaseInsensitiveString(key)] = value
   }
   for key, value in extra {
-    merged[key] = value
+    merged[@http.CaseInsensitiveString(key)] = value
   }
   merged
 }
@@ -136,13 +136,13 @@ pub async fn Octorab::request_raw(
   self : Octorab,
   http_method : @http.RequestMethod,
   url_or_path : String,
-  query? : Map[String, String] = {},
+  query~ : Map[String, String] = Map([]),
   body? : &@io.Data,
-  headers? : Map[String, String] = {},
+  headers~ : Map[String, String] = Map([]),
 ) -> (@http.Response, &@io.Data) {
   let (base_uri, path) = self.resolve_target(url_or_path, query)
   let merged_headers = merge_headers(self.base_headers(), headers)
-  let client = @http.Client::new(base_uri, headers=merged_headers)
+  let client = @http.Client(base_uri, headers=merged_headers)
   defer client.close()
   client.request(http_method, path)
   if body is Some(data) {
@@ -158,9 +158,9 @@ pub async fn Octorab::request(
   self : Octorab,
   http_method : @http.RequestMethod,
   url_or_path : String,
-  query? : Map[String, String] = {},
+  query~ : Map[String, String] = Map([]),
   body? : &@io.Data,
-  headers? : Map[String, String] = {},
+  headers~ : Map[String, String] = Map([]),
 ) -> (@http.Response, &@io.Data) {
   let (response, data) = match body {
     Some(data) =>
@@ -179,7 +179,7 @@ fn with_json_header(headers : Map[String, String]) -> Map[String, String] {
   if header_value(headers, "content-type") is Some(_) {
     headers
   } else {
-    let updated : Map[String, String] = {}
+    let updated : Map[String, String] = Map([])
     for key, value in headers {
       updated[key] = value
     }
@@ -193,9 +193,9 @@ pub async fn[T : FromJson] Octorab::request_json(
   self : Octorab,
   http_method : @http.RequestMethod,
   url_or_path : String,
-  query? : Map[String, String] = {},
+  query~ : Map[String, String] = Map([]),
   body? : Json,
-  headers? : Map[String, String] = {},
+  headers~ : Map[String, String] = Map([]),
 ) -> T {
   let json_headers = if body is Some(_) {
     with_json_header(headers)
@@ -221,8 +221,8 @@ pub async fn[T : FromJson] Octorab::request_json(
 pub async fn Octorab::get_raw(
   self : Octorab,
   url_or_path : String,
-  query? : Map[String, String] = {},
-  headers? : Map[String, String] = {},
+  query~ : Map[String, String] = Map([]),
+  headers~ : Map[String, String] = Map([]),
 ) -> (@http.Response, &@io.Data) {
   self.request_raw(@http.RequestMethod::Get, url_or_path, query~, headers~)
 }
@@ -231,8 +231,8 @@ pub async fn Octorab::get_raw(
 pub async fn[T : FromJson] Octorab::get(
   self : Octorab,
   url_or_path : String,
-  query? : Map[String, String] = {},
-  headers? : Map[String, String] = {},
+  query~ : Map[String, String] = Map([]),
+  headers~ : Map[String, String] = Map([]),
 ) -> T {
   self.request_json(@http.RequestMethod::Get, url_or_path, query~, headers~)
 }
@@ -242,8 +242,8 @@ pub async fn Octorab::post_raw(
   self : Octorab,
   url_or_path : String,
   body : &@io.Data,
-  query? : Map[String, String] = {},
-  headers? : Map[String, String] = {},
+  query~ : Map[String, String] = Map([]),
+  headers~ : Map[String, String] = Map([]),
 ) -> (@http.Response, &@io.Data) {
   self.request_raw(
     @http.RequestMethod::Post,
@@ -259,8 +259,8 @@ pub async fn[T : FromJson] Octorab::post(
   self : Octorab,
   url_or_path : String,
   body : Json,
-  query? : Map[String, String] = {},
-  headers? : Map[String, String] = {},
+  query~ : Map[String, String] = Map([]),
+  headers~ : Map[String, String] = Map([]),
 ) -> T {
   self.request_json(
     @http.RequestMethod::Post,
@@ -276,8 +276,8 @@ pub async fn[T : FromJson] Octorab::patch(
   self : Octorab,
   url_or_path : String,
   body : Json,
-  query? : Map[String, String] = {},
-  headers? : Map[String, String] = {},
+  query~ : Map[String, String] = Map([]),
+  headers~ : Map[String, String] = Map([]),
 ) -> T {
   self.request_json(
     @http.RequestMethod::Patch,
@@ -293,8 +293,8 @@ pub async fn[T : FromJson] Octorab::put(
   self : Octorab,
   url_or_path : String,
   body : Json,
-  query? : Map[String, String] = {},
-  headers? : Map[String, String] = {},
+  query~ : Map[String, String] = Map([]),
+  headers~ : Map[String, String] = Map([]),
 ) -> T {
   self.request_json(
     @http.RequestMethod::Put,
@@ -309,8 +309,8 @@ pub async fn[T : FromJson] Octorab::put(
 pub async fn Octorab::delete(
   self : Octorab,
   url_or_path : String,
-  query? : Map[String, String] = {},
-  headers? : Map[String, String] = {},
+  query~ : Map[String, String] = Map([]),
+  headers~ : Map[String, String] = Map([]),
 ) -> Unit {
   let _ = self.request(
     @http.RequestMethod::Delete,
@@ -325,8 +325,8 @@ pub async fn Octorab::delete(
 pub async fn[T : FromJson] Octorab::get_page(
   self : Octorab,
   url_or_path : String,
-  query? : Map[String, String] = {},
-  headers? : Map[String, String] = {},
+  query~ : Map[String, String] = Map([]),
+  headers~ : Map[String, String] = Map([]),
 ) -> Page[T] {
   let (response, data) = self.request(
     @http.RequestMethod::Get,
@@ -342,7 +342,11 @@ pub async fn[T : FromJson] Octorab::get_page(
     return Page::empty()
   }
   let json = bytes |> @utf8.decode |> @json.parse
-  parse_page(json, response.headers)
+  let headers : Map[String, String] = Map([])
+  for key, value in response.headers {
+    headers[key.to_string()] = value
+  }
+  parse_page(json, headers)
 }
 
 ///|
@@ -377,7 +381,7 @@ pub async fn[T : FromJson] Octorab::all_pages(
 }
 
 ///|
-let global_instance : Ref[Octorab?] = Ref::new(None)
+let global_instance : Ref[Octorab?] = Ref(None)
 
 ///|
 pub fn initialise(client : Octorab) -> Unit {

@@ -11,13 +11,13 @@ pub fn Octorab::pulls(
   owner : String,
   repo : String,
 ) -> PullsHandler {
-  { crab: self, owner, repo }
+  { crab: self, owner, repo, }
 }
 
 ///|
 pub async fn PullsHandler::get(
   self : PullsHandler,
-  number : Int,
+  number : Int32,
 ) -> PullRequest {
   self.crab.get("/repos/\{self.owner}/\{self.repo}/pulls/\{number}")
 }
@@ -30,10 +30,10 @@ pub async fn PullsHandler::list(
   base? : String,
   sort? : PullSort,
   direction? : SortDirection,
-  per_page? : Int,
-  page? : Int,
+  per_page? : Int32,
+  page? : Int32,
 ) -> Page[PullRequest] {
-  let params : Map[String, String] = {}
+  let params : Map[String, String] = Map([])
   if state is Some(state) {
     add_query(params, "state", Some(state.as_query()))
   }
@@ -53,11 +53,11 @@ pub async fn PullsHandler::list(
 ///|
 pub async fn PullsHandler::list_files(
   self : PullsHandler,
-  number : Int,
-  per_page? : Int,
-  page? : Int,
+  number : Int32,
+  per_page? : Int32,
+  page? : Int32,
 ) -> Page[PullRequestFile] {
-  let params : Map[String, String] = {}
+  let params : Map[String, String] = Map([])
   add_query_int(params, "per_page", per_page)
   add_query_int(params, "page", page)
   self.crab.get_page(

@@ -5,13 +5,13 @@ pub struct AppsHandler {
 
 ///|
 pub fn Octorab::apps(self : Octorab) -> AppsHandler {
-  { crab: self }
+  { crab: self, }
 }
 
 ///|
 pub async fn AppsHandler::installation(
   self : AppsHandler,
-  installation_id : Int,
+  installation_id : Int32,
 ) -> Json {
   self.crab.get("/app/installations/\{installation_id}")
 }
@@ -20,10 +20,10 @@ pub async fn AppsHandler::installation(
 pub async fn AppsHandler::list_installations(
   self : AppsHandler,
   since? : String,
-  per_page? : Int,
-  page? : Int,
+  per_page? : Int32,
+  page? : Int32,
 ) -> Page[Json] {
-  let params : Map[String, String] = {}
+  let params : Map[String, String] = Map([])
   add_query(params, "since", since)
   add_query_int(params, "per_page", per_page)
   add_query_int(params, "page", page)

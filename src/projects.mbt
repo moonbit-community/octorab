@@ -9,10 +9,10 @@ pub async fn Octorab::list_repo_projects(
   owner : String,
   repo : String,
   state? : String,
-  per_page? : Int,
-  page? : Int,
+  per_page? : Int32,
+  page? : Int32,
 ) -> Page[Json] {
-  let params : Map[String, String] = {}
+  let params : Map[String, String] = Map([])
   add_query(params, "state", state)
   add_query_int(params, "per_page", per_page)
   add_query_int(params, "page", page)
@@ -28,10 +28,10 @@ pub async fn Octorab::list_org_projects(
   self : Octorab,
   org : String,
   state? : String,
-  per_page? : Int,
-  page? : Int,
+  per_page? : Int32,
+  page? : Int32,
 ) -> Page[Json] {
-  let params : Map[String, String] = {}
+  let params : Map[String, String] = Map([])
   add_query(params, "state", state)
   add_query_int(params, "per_page", per_page)
   add_query_int(params, "page", page)
@@ -43,18 +43,18 @@ pub async fn Octorab::list_org_projects(
 }
 
 ///|
-pub async fn Octorab::get_project(self : Octorab, project_id : Int) -> Json {
+pub async fn Octorab::get_project(self : Octorab, project_id : Int32) -> Json {
   self.get("/projects/\{project_id}", headers=projects_headers())
 }
 
 ///|
 pub async fn Octorab::list_project_columns(
   self : Octorab,
-  project_id : Int,
-  per_page? : Int,
-  page? : Int,
+  project_id : Int32,
+  per_page? : Int32,
+  page? : Int32,
 ) -> Page[Json] {
-  let params : Map[String, String] = {}
+  let params : Map[String, String] = Map([])
   add_query_int(params, "per_page", per_page)
   add_query_int(params, "page", page)
   self.get_page(
@@ -67,11 +67,11 @@ pub async fn Octorab::list_project_columns(
 ///|
 pub async fn Octorab::list_project_cards(
   self : Octorab,
-  column_id : Int,
-  per_page? : Int,
-  page? : Int,
+  column_id : Int32,
+  per_page? : Int32,
+  page? : Int32,
 ) -> Page[Json] {
-  let params : Map[String, String] = {}
+  let params : Map[String, String] = Map([])
   add_query_int(params, "per_page", per_page)
   add_query_int(params, "page", page)
   self.get_page(

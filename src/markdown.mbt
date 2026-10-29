@@ -5,7 +5,7 @@ pub async fn Octorab::render_markdown(
   mode? : String,
   context? : String,
 ) -> String {
-  let payload : Map[String, Json] = {}
+  let payload : Map[String, Json] = Map([])
   payload["text"] = Json::string(text)
   if mode is Some(mode) {
     payload["mode"] = Json::string(mode)

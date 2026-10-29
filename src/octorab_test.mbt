@@ -140,9 +140,11 @@ async test "search repositories finds octorab_test" {
 
 ///|
 async test "repos get contents missing path returns 404" {
-  let result : Result[Json, Error] = try? repo_handler(test_client()).get_contents(
-    path="__octorab_missing__",
-  )
+  let result : Result[Json, Error] = Ok(
+    repo_handler(test_client()).get_contents(path="__octorab_missing__"),
+  ) catch {
+    e => Err(e)
+  }
   match result {
     Err(@octorab.OctorabError::HttpError(err)) => assert_eq(err.status, 404)
     Ok(_) => fail("expected http error")

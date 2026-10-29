@@ -1,6 +1,6 @@
 ///|
 pub struct GitHubError {
-  status : Int
+  status : Int32
   message : String
   documentation_url : String?
   errors : Array[Json]?
@@ -13,7 +13,7 @@ pub suberror OctorabError {
 } derive(Show, ToJson)
 
 ///|
-pub fn is_success_status(code : Int) -> Bool {
+pub fn is_success_status(code : Int32) -> Bool {
   code >= 200 && code < 300
 }
 
@@ -40,7 +40,7 @@ fn parse_error_fields(json : Json) -> (String?, String?, Array[Json]?) {
 }
 
 ///|
-pub fn parse_github_error(status : Int, body : &@io.Data) -> GitHubError {
+pub fn parse_github_error(status : Int32, body : &@io.Data) -> GitHubError {
   let mut message : String = "HTTP \{status}"
   let mut documentation_url : String? = None
   let mut errors : Array[Json]? = None
@@ -67,5 +67,5 @@ pub fn parse_github_error(status : Int, body : &@io.Data) -> GitHubError {
       text => if text != "" { message = text }
     }
   }
-  { status, message, documentation_url, errors }
+  { status, message, documentation_url, errors, }
 }

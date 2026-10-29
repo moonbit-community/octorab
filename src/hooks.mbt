@@ -7,16 +7,16 @@ pub struct HooksHandler {
 
 ///|
 pub fn Octorab::hooks(self : Octorab, owner : String) -> HooksHandler {
-  { crab: self, owner, repo: None }
+  { crab: self, owner, repo: None, }
 }
 
 ///|
 pub fn HooksHandler::repo(self : HooksHandler, repo : String) -> HooksHandler {
-  { ..self, repo: Some(repo) }
+  { ..self, repo: Some(repo), }
 }
 
 ///|
-fn HooksHandler::delivery_path(self : HooksHandler, hook_id : Int) -> String {
+fn HooksHandler::delivery_path(self : HooksHandler, hook_id : Int32) -> String {
   match self.repo {
     Some(repo) => "/repos/\{self.owner}/\{repo}/hooks/\{hook_id}/deliveries"
     None => "/orgs/\{self.owner}/hooks/\{hook_id}/deliveries"
@@ -26,8 +26,8 @@ fn HooksHandler::delivery_path(self : HooksHandler, hook_id : Int) -> String {
 ///|
 fn HooksHandler::retry_path(
   self : HooksHandler,
-  hook_id : Int,
-  delivery_id : Int,
+  hook_id : Int32,
+  delivery_id : Int32,
 ) -> String {
   match self.repo {
     Some(repo) =>
@@ -40,11 +40,11 @@ fn HooksHandler::retry_path(
 ///|
 pub async fn HooksHandler::list_deliveries(
   self : HooksHandler,
-  hook_id : Int,
-  per_page? : Int,
-  page? : Int,
+  hook_id : Int32,
+  per_page? : Int32,
+  page? : Int32,
 ) -> Page[Json] {
-  let params : Map[String, String] = {}
+  let params : Map[String, String] = Map([])
   add_query_int(params, "per_page", per_page)
   add_query_int(params, "page", page)
   let path = self.delivery_path(hook_id)
@@ -54,8 +54,8 @@ pub async fn HooksHandler::list_deliveries(
 ///|
 pub async fn HooksHandler::retry_delivery(
   self : HooksHandler,
-  hook_id : Int,
-  delivery_id : Int,
+  hook_id : Int32,
+  delivery_id : Int32,
 ) -> Unit {
   let path = self.retry_path(hook_id, delivery_id)
   let _ = self.crab.request(@http.RequestMethod::Post, path)
