@@ -4,13 +4,13 @@ pub struct GitHubError {
   message : String
   documentation_url : String?
   errors : Array[Json]?
-} derive(Show, ToJson, Eq)
+} derive(ToJson, Eq)
 
 ///|
 pub suberror OctorabError {
   InvalidUrl(String)
   HttpError(GitHubError)
-} derive(Show, ToJson)
+} derive(ToJson)
 
 ///|
 pub fn is_success_status(code : Int32) -> Bool {
@@ -68,4 +68,104 @@ pub fn parse_github_error(status : Int32, body : &@io.Data) -> GitHubError {
     }
   }
   { status, message, documentation_url, errors, }
+}
+
+///|
+pub impl Show for GitHubError with fn output(self, logger) {
+  logger.write_string("{")
+  logger.write_string("status: ")
+  logger.write_object(self.status)
+  logger.write_string(", message: ")
+  logger.write_object(self.message)
+  logger.write_string(", documentation_url: ")
+  match self.documentation_url {
+    None => logger.write_string("None")
+    Some(value387) => {
+      logger.write_string("Some(")
+      logger.write_object(value387)
+      logger.write_string(")")
+    }
+  }
+  logger.write_string(", errors: ")
+  match self.errors {
+    None => logger.write_string("None")
+    Some(value389) => {
+      logger.write_string("Some(")
+      logger.write_string("[")
+      for i390, value390 in value389 {
+        if i390 > 0 {
+          logger.write_string(", ")
+        }
+        output_legacy_json(value390, logger)
+      }
+      logger.write_string("]")
+      logger.write_string(")")
+    }
+  }
+  logger.write_string("}")
+}
+
+///|
+pub impl Show for OctorabError with fn output(self, logger) {
+  match self {
+    InvalidUrl(arg0) => {
+      logger.write_string("InvalidUrl(")
+      logger.write_object(arg0)
+      logger.write_string(")")
+    }
+    HttpError(arg0) => {
+      logger.write_string("HttpError(")
+      logger.write_object(arg0)
+      logger.write_string(")")
+    }
+  }
+}
+
+///|
+// Keep the historical public error display format without deprecated Json Show.
+fn output_legacy_json(value : Json, logger : &Logger) -> Unit {
+  match value {
+    Null => logger.write_string("Null")
+    True => logger.write_string("True")
+    False => logger.write_string("False")
+    Number(n, repr~) => {
+      logger.write_string("Number(")
+      logger.write_object(n)
+      if repr is Some(repr) {
+        logger.write_string(", repr=Some(")
+        logger.write_string(repr)
+        logger.write_string(")")
+      }
+      logger.write_string(")")
+    }
+    String(s) => {
+      logger.write_string("String(")
+      logger.write_string(s)
+      logger.write_string(")")
+    }
+    Array(values) => {
+      logger.write_string("Array([")
+      for i, item in values {
+        if i > 0 {
+          logger.write_string(", ")
+        }
+        output_legacy_json(item, logger)
+      }
+      logger.write_string("])")
+    }
+    Object(values) => {
+      logger.write_string("Object({")
+      let mut first = true
+      for key, item in values {
+        if !first {
+          logger.write_string(", ")
+        }
+        first = false
+        logger.write_string(key)
+        logger.write_string(": ")
+        output_legacy_json(item, logger)
+      }
+      logger.write_string("})")
+    }
+  }
 }

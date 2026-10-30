@@ -4,7 +4,7 @@ pub struct PageLinks {
   mut prev : String?
   mut first : String?
   mut last : String?
-} derive(Show, ToJson, Eq)
+} derive(ToJson, Eq)
 
 ///|
 pub fn PageLinks::empty() -> PageLinks {
@@ -142,4 +142,46 @@ fn[T : FromJson] parse_page(
       }
     }
   }
+}
+
+///|
+pub impl Show for PageLinks with fn output(self, logger) {
+  logger.write_string("{")
+  logger.write_string("next: ")
+  match self.next {
+    None => logger.write_string("None")
+    Some(value377) => {
+      logger.write_string("Some(")
+      logger.write_object(value377)
+      logger.write_string(")")
+    }
+  }
+  logger.write_string(", prev: ")
+  match self.prev {
+    None => logger.write_string("None")
+    Some(value379) => {
+      logger.write_string("Some(")
+      logger.write_object(value379)
+      logger.write_string(")")
+    }
+  }
+  logger.write_string(", first: ")
+  match self.first {
+    None => logger.write_string("None")
+    Some(value381) => {
+      logger.write_string("Some(")
+      logger.write_object(value381)
+      logger.write_string(")")
+    }
+  }
+  logger.write_string(", last: ")
+  match self.last {
+    None => logger.write_string("None")
+    Some(value383) => {
+      logger.write_string("Some(")
+      logger.write_object(value383)
+      logger.write_string(")")
+    }
+  }
+  logger.write_string("}")
 }
