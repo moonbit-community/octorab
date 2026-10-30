@@ -20,10 +20,11 @@ pub fn parse_github_error(Int32, &@io.Data) -> GitHubError
 pub suberror OctorabError {
   InvalidUrl(String)
   HttpError(GitHubError)
-} derive(Show, ToJson)
+} derive(ToJson)
 pub fn OctorabError::output(Self, &Logger) -> Unit
 pub fn OctorabError::to_json(Self) -> Json
 pub fn OctorabError::to_string(Self) -> String
+pub impl Show for OctorabError
 
 // Types and methods
 pub struct ActionsHandler {
@@ -58,7 +59,7 @@ pub async fn AppsHandler::list_installations(Self, since? : String, per_page? : 
 pub enum Auth {
   Token(String)
   Bearer(String)
-} derive(Eq, Show, ToJson)
+} derive(Eq, ToJson)
 pub fn Auth::bearer(String) -> Self
 pub fn Auth::equal(Self, Self) -> Bool
 pub fn Auth::header(Self) -> (String, String)
@@ -67,6 +68,7 @@ pub fn Auth::output(Self, &Logger) -> Unit
 pub fn Auth::to_json(Self) -> Json
 pub fn Auth::to_string(Self) -> String
 pub fn Auth::token(String) -> Self
+pub impl Show for Auth
 
 pub struct ChecksHandler {
   crab : Octorab
@@ -122,12 +124,13 @@ pub struct GitHubError {
   message : String
   documentation_url : String?
   errors : Array[Json]?
-} derive(Eq, Show, ToJson)
+} derive(Eq, ToJson)
 pub fn GitHubError::equal(Self, Self) -> Bool
 pub fn GitHubError::not_equal(Self, Self) -> Bool
 pub fn GitHubError::output(Self, &Logger) -> Unit
 pub fn GitHubError::to_json(Self) -> Json
 pub fn GitHubError::to_string(Self) -> String
+pub impl Show for GitHubError
 
 pub struct GitignoreHandler {
   crab : Octorab
@@ -154,25 +157,27 @@ pub struct Issue {
   comments : Int32?
   html_url : String?
   pull_request : PullRequestLinks?
-} derive(Eq, Show, ToJson, @json.FromJson)
+} derive(Eq, ToJson, @json.FromJson)
 pub fn Issue::equal(Self, Self) -> Bool
 pub fn Issue::from_json(Json, @json.JsonPath) -> Self raise @json.JsonDecodeError
 pub fn Issue::not_equal(Self, Self) -> Bool
 pub fn Issue::output(Self, &Logger) -> Unit
 pub fn Issue::to_json(Self) -> Json
 pub fn Issue::to_string(Self) -> String
+pub impl Show for Issue
 
 pub(all) enum IssueState {
   Open
   Closed
   All
-} derive(Eq, Show, ToJson)
+} derive(Eq, ToJson)
 pub fn IssueState::as_query(Self) -> String
 pub fn IssueState::equal(Self, Self) -> Bool
 pub fn IssueState::not_equal(Self, Self) -> Bool
 pub fn IssueState::output(Self, &Logger) -> Unit
 pub fn IssueState::to_json(Self) -> Json
 pub fn IssueState::to_string(Self) -> String
+pub impl Show for IssueState
 
 pub struct IssuesHandler {
   crab : Octorab
@@ -267,38 +272,41 @@ pub fn Octorab::workflows(Self, String, String) -> WorkflowsHandler
 pub(all) enum OrgMemberFilter {
   All
   TwoFactorDisabled
-} derive(Eq, Show, ToJson)
+} derive(Eq, ToJson)
 pub fn OrgMemberFilter::as_query(Self) -> String
 pub fn OrgMemberFilter::equal(Self, Self) -> Bool
 pub fn OrgMemberFilter::not_equal(Self, Self) -> Bool
 pub fn OrgMemberFilter::output(Self, &Logger) -> Unit
 pub fn OrgMemberFilter::to_json(Self) -> Json
 pub fn OrgMemberFilter::to_string(Self) -> String
+pub impl Show for OrgMemberFilter
 
 pub(all) enum OrgMemberRole {
   All
   Admin
   Member
-} derive(Eq, Show, ToJson)
+} derive(Eq, ToJson)
 pub fn OrgMemberRole::as_query(Self) -> String
 pub fn OrgMemberRole::equal(Self, Self) -> Bool
 pub fn OrgMemberRole::not_equal(Self, Self) -> Bool
 pub fn OrgMemberRole::output(Self, &Logger) -> Unit
 pub fn OrgMemberRole::to_json(Self) -> Json
 pub fn OrgMemberRole::to_string(Self) -> String
+pub impl Show for OrgMemberRole
 
 pub(all) enum OrgRepoSort {
   Created
   Updated
   Pushed
   FullName
-} derive(Eq, Show, ToJson)
+} derive(Eq, ToJson)
 pub fn OrgRepoSort::as_query(Self) -> String
 pub fn OrgRepoSort::equal(Self, Self) -> Bool
 pub fn OrgRepoSort::not_equal(Self, Self) -> Bool
 pub fn OrgRepoSort::output(Self, &Logger) -> Unit
 pub fn OrgRepoSort::to_json(Self) -> Json
 pub fn OrgRepoSort::to_string(Self) -> String
+pub impl Show for OrgRepoSort
 
 pub(all) enum OrgRepoType {
   All
@@ -308,13 +316,14 @@ pub(all) enum OrgRepoType {
   Sources
   Member
   Internal
-} derive(Eq, Show, ToJson)
+} derive(Eq, ToJson)
 pub fn OrgRepoType::as_query(Self) -> String
 pub fn OrgRepoType::equal(Self, Self) -> Bool
 pub fn OrgRepoType::not_equal(Self, Self) -> Bool
 pub fn OrgRepoType::output(Self, &Logger) -> Unit
 pub fn OrgRepoType::to_json(Self) -> Json
 pub fn OrgRepoType::to_string(Self) -> String
+pub impl Show for OrgRepoType
 
 pub struct Organization {
   login : String
@@ -323,13 +332,14 @@ pub struct Organization {
   description : String?
   html_url : String?
   repos_url : String?
-} derive(Eq, Show, ToJson, @json.FromJson)
+} derive(Eq, ToJson, @json.FromJson)
 pub fn Organization::equal(Self, Self) -> Bool
 pub fn Organization::from_json(Json, @json.JsonPath) -> Self raise @json.JsonDecodeError
 pub fn Organization::not_equal(Self, Self) -> Bool
 pub fn Organization::output(Self, &Logger) -> Unit
 pub fn Organization::to_json(Self) -> Json
 pub fn Organization::to_string(Self) -> String
+pub impl Show for Organization
 
 pub struct OrgsHandler {
   crab : Octorab
@@ -356,13 +366,14 @@ pub struct PageLinks {
   mut prev : String?
   mut first : String?
   mut last : String?
-} derive(Eq, Show, ToJson)
+} derive(Eq, ToJson)
 pub fn PageLinks::empty() -> Self
 pub fn PageLinks::equal(Self, Self) -> Bool
 pub fn PageLinks::not_equal(Self, Self) -> Bool
 pub fn PageLinks::output(Self, &Logger) -> Unit
 pub fn PageLinks::to_json(Self) -> Json
 pub fn PageLinks::to_string(Self) -> String
+pub impl Show for PageLinks
 
 pub struct PullRequest {
   id : Int32
@@ -375,13 +386,14 @@ pub struct PullRequest {
   diff_url : String?
   patch_url : String?
   merged_at : String?
-} derive(Eq, Show, ToJson, @json.FromJson)
+} derive(Eq, ToJson, @json.FromJson)
 pub fn PullRequest::equal(Self, Self) -> Bool
 pub fn PullRequest::from_json(Json, @json.JsonPath) -> Self raise @json.JsonDecodeError
 pub fn PullRequest::not_equal(Self, Self) -> Bool
 pub fn PullRequest::output(Self, &Logger) -> Unit
 pub fn PullRequest::to_json(Self) -> Json
 pub fn PullRequest::to_string(Self) -> String
+pub impl Show for PullRequest
 
 pub struct PullRequestFile {
   sha : String
@@ -391,39 +403,42 @@ pub struct PullRequestFile {
   deletions : Int32?
   changes : Int32?
   patch : String?
-} derive(Eq, Show, ToJson, @json.FromJson)
+} derive(Eq, ToJson, @json.FromJson)
 pub fn PullRequestFile::equal(Self, Self) -> Bool
 pub fn PullRequestFile::from_json(Json, @json.JsonPath) -> Self raise @json.JsonDecodeError
 pub fn PullRequestFile::not_equal(Self, Self) -> Bool
 pub fn PullRequestFile::output(Self, &Logger) -> Unit
 pub fn PullRequestFile::to_json(Self) -> Json
 pub fn PullRequestFile::to_string(Self) -> String
+pub impl Show for PullRequestFile
 
 pub struct PullRequestLinks {
   url : String?
   html_url : String?
   diff_url : String?
   patch_url : String?
-} derive(Eq, Show, ToJson, @json.FromJson)
+} derive(Eq, ToJson, @json.FromJson)
 pub fn PullRequestLinks::equal(Self, Self) -> Bool
 pub fn PullRequestLinks::from_json(Json, @json.JsonPath) -> Self raise @json.JsonDecodeError
 pub fn PullRequestLinks::not_equal(Self, Self) -> Bool
 pub fn PullRequestLinks::output(Self, &Logger) -> Unit
 pub fn PullRequestLinks::to_json(Self) -> Json
 pub fn PullRequestLinks::to_string(Self) -> String
+pub impl Show for PullRequestLinks
 
 pub(all) enum PullSort {
   Created
   Updated
   Popularity
   LongRunning
-} derive(Eq, Show, ToJson)
+} derive(Eq, ToJson)
 pub fn PullSort::as_query(Self) -> String
 pub fn PullSort::equal(Self, Self) -> Bool
 pub fn PullSort::not_equal(Self, Self) -> Bool
 pub fn PullSort::output(Self, &Logger) -> Unit
 pub fn PullSort::to_json(Self) -> Json
 pub fn PullSort::to_string(Self) -> String
+pub impl Show for PullSort
 
 pub struct PullsHandler {
   crab : Octorab
@@ -438,13 +453,14 @@ pub(all) enum RepoSort {
   Stars
   Forks
   Updated
-} derive(Eq, Show, ToJson)
+} derive(Eq, ToJson)
 pub fn RepoSort::as_query(Self) -> String
 pub fn RepoSort::equal(Self, Self) -> Bool
 pub fn RepoSort::not_equal(Self, Self) -> Bool
 pub fn RepoSort::output(Self, &Logger) -> Unit
 pub fn RepoSort::to_json(Self) -> Json
 pub fn RepoSort::to_string(Self) -> String
+pub impl Show for RepoSort
 
 pub struct ReposHandler {
   crab : Octorab
@@ -481,13 +497,14 @@ pub struct Repository {
   watchers_count : Int32?
   language : String?
   default_branch : String?
-} derive(Eq, Show, ToJson)
+} derive(Eq, ToJson)
 pub fn Repository::equal(Self, Self) -> Bool
 pub fn Repository::from_json(Json, @json.JsonPath) -> Self raise @json.JsonDecodeError
 pub fn Repository::not_equal(Self, Self) -> Bool
 pub fn Repository::output(Self, &Logger) -> Unit
 pub fn Repository::to_json(Self) -> Json
 pub fn Repository::to_string(Self) -> String
+pub impl Show for Repository
 pub impl @json.FromJson for Repository
 
 type SearchPage[T] derive(@json.FromJson)
@@ -496,13 +513,14 @@ pub fn[T : @json.FromJson] SearchPage::from_json(Json, @json.JsonPath) -> Self[T
 pub(all) enum SortDirection {
   Asc
   Desc
-} derive(Eq, Show, ToJson)
+} derive(Eq, ToJson)
 pub fn SortDirection::as_query(Self) -> String
 pub fn SortDirection::equal(Self, Self) -> Bool
 pub fn SortDirection::not_equal(Self, Self) -> Bool
 pub fn SortDirection::output(Self, &Logger) -> Unit
 pub fn SortDirection::to_json(Self) -> Json
 pub fn SortDirection::to_string(Self) -> String
+pub impl Show for SortDirection
 
 pub struct TeamsHandler {
   crab : Octorab
@@ -519,13 +537,14 @@ pub struct User {
   node_id : String?
   avatar_url : String?
   html_url : String?
-} derive(Eq, Show, ToJson, @json.FromJson)
+} derive(Eq, ToJson, @json.FromJson)
 pub fn User::equal(Self, Self) -> Bool
 pub fn User::from_json(Json, @json.JsonPath) -> Self raise @json.JsonDecodeError
 pub fn User::not_equal(Self, Self) -> Bool
 pub fn User::output(Self, &Logger) -> Unit
 pub fn User::to_json(Self) -> Json
 pub fn User::to_string(Self) -> String
+pub impl Show for User
 
 pub struct WorkflowsHandler {
   crab : Octorab

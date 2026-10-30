@@ -3,7 +3,7 @@ pub(all) enum IssueState {
   Open
   Closed
   All
-} derive(Show, Eq, ToJson)
+} derive(Eq, ToJson)
 
 ///|
 pub fn IssueState::as_query(self : IssueState) -> String {
@@ -18,7 +18,7 @@ pub fn IssueState::as_query(self : IssueState) -> String {
 pub(all) enum SortDirection {
   Asc
   Desc
-} derive(Show, Eq, ToJson)
+} derive(Eq, ToJson)
 
 ///|
 pub fn SortDirection::as_query(self : SortDirection) -> String {
@@ -33,7 +33,7 @@ pub(all) enum RepoSort {
   Stars
   Forks
   Updated
-} derive(Show, Eq, ToJson)
+} derive(Eq, ToJson)
 
 ///|
 pub fn RepoSort::as_query(self : RepoSort) -> String {
@@ -50,7 +50,7 @@ pub(all) enum PullSort {
   Updated
   Popularity
   LongRunning
-} derive(Show, Eq, ToJson)
+} derive(Eq, ToJson)
 
 ///|
 pub fn PullSort::as_query(self : PullSort) -> String {
@@ -71,7 +71,7 @@ pub(all) enum OrgRepoType {
   Sources
   Member
   Internal
-} derive(Show, Eq, ToJson)
+} derive(Eq, ToJson)
 
 ///|
 pub fn OrgRepoType::as_query(self : OrgRepoType) -> String {
@@ -92,7 +92,7 @@ pub(all) enum OrgRepoSort {
   Updated
   Pushed
   FullName
-} derive(Show, Eq, ToJson)
+} derive(Eq, ToJson)
 
 ///|
 pub fn OrgRepoSort::as_query(self : OrgRepoSort) -> String {
@@ -108,7 +108,7 @@ pub fn OrgRepoSort::as_query(self : OrgRepoSort) -> String {
 pub(all) enum OrgMemberFilter {
   All
   TwoFactorDisabled
-} derive(Show, Eq, ToJson)
+} derive(Eq, ToJson)
 
 ///|
 pub fn OrgMemberFilter::as_query(self : OrgMemberFilter) -> String {
@@ -123,7 +123,7 @@ pub(all) enum OrgMemberRole {
   All
   Admin
   Member
-} derive(Show, Eq, ToJson)
+} derive(Eq, ToJson)
 
 ///|
 pub fn OrgMemberRole::as_query(self : OrgMemberRole) -> String {
@@ -131,5 +131,81 @@ pub fn OrgMemberRole::as_query(self : OrgMemberRole) -> String {
     All => "all"
     Admin => "admin"
     Member => "member"
+  }
+}
+
+///|
+pub impl Show for IssueState with fn output(self, logger) {
+  match self {
+    Open => logger.write_string("Open")
+    Closed => logger.write_string("Closed")
+    All => logger.write_string("All")
+  }
+}
+
+///|
+pub impl Show for SortDirection with fn output(self, logger) {
+  match self {
+    Asc => logger.write_string("Asc")
+    Desc => logger.write_string("Desc")
+  }
+}
+
+///|
+pub impl Show for RepoSort with fn output(self, logger) {
+  match self {
+    Stars => logger.write_string("Stars")
+    Forks => logger.write_string("Forks")
+    Updated => logger.write_string("Updated")
+  }
+}
+
+///|
+pub impl Show for PullSort with fn output(self, logger) {
+  match self {
+    Created => logger.write_string("Created")
+    Updated => logger.write_string("Updated")
+    Popularity => logger.write_string("Popularity")
+    LongRunning => logger.write_string("LongRunning")
+  }
+}
+
+///|
+pub impl Show for OrgRepoType with fn output(self, logger) {
+  match self {
+    All => logger.write_string("All")
+    Public => logger.write_string("Public")
+    Private => logger.write_string("Private")
+    Forks => logger.write_string("Forks")
+    Sources => logger.write_string("Sources")
+    Member => logger.write_string("Member")
+    Internal => logger.write_string("Internal")
+  }
+}
+
+///|
+pub impl Show for OrgRepoSort with fn output(self, logger) {
+  match self {
+    Created => logger.write_string("Created")
+    Updated => logger.write_string("Updated")
+    Pushed => logger.write_string("Pushed")
+    FullName => logger.write_string("FullName")
+  }
+}
+
+///|
+pub impl Show for OrgMemberFilter with fn output(self, logger) {
+  match self {
+    All => logger.write_string("All")
+    TwoFactorDisabled => logger.write_string("TwoFactorDisabled")
+  }
+}
+
+///|
+pub impl Show for OrgMemberRole with fn output(self, logger) {
+  match self {
+    All => logger.write_string("All")
+    Admin => logger.write_string("Admin")
+    Member => logger.write_string("Member")
   }
 }
